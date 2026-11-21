@@ -12,6 +12,7 @@ Cada canal solo se usa si tiene sus llaves puestas:
   Email (Gmail u otro):  EMAIL_USUARIO, EMAIL_CLAVE, EMAIL_DESTINO (opcional),
                          EMAIL_SMTP (opcional, por defecto smtp.gmail.com)
   WhatsApp (CallMeBot):  WHATSAPP_TELEFONO, WHATSAPP_APIKEY
+  Canal de Telegram:     TELEGRAM_TOKEN (la llave del bot), TELEGRAM_CANAL (p. ej. @micanal)
 
 Uso:
     python3 avisar.py            # avisa solo si hay algo que contar
@@ -22,6 +23,7 @@ import json
 import os
 import smtplib
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta
@@ -113,6 +115,33 @@ def enviar_whatsapp(texto):
     print("WhatsApp: enviado.")
 
 
+def enviar_telegram(texto):
+    token = os.environ.get("TELEGRAM_TOKEN")
+    canal = os.environ.get("TELEGRAM_CANAL")
+    if not (token and canal):
+        print("Telegram: no configurado, se omite.")
+        return
+    if not canal.startswith(("@", "-")):
+        canal = "@" + canal  # por si se escribe el nombre sin la @
+    datos = json.dumps({
+        "chat_id": canal,
+        "text": texto,
+        "link_preview_options": {"is_disabled": True},  # sin vista previa del enlace
+    }).encode("utf-8")
+    peticion = urllib.request.Request(
+        f"https://api.telegram.org/bot{token}/sendMessage",
+        data=datos, headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(peticion, timeout=30) as r:
+            respuesta = json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        # Telegram explica el motivo del error en la respuesta (p. ej. "chat not found")
+        respuesta = json.loads(e.read() or b"{}")
+    if not respuesta.get("ok"):
+        raise RuntimeError(f"Telegram respondió: {respuesta.get('description', respuesta)}")
+    print("Telegram: publicado en el canal.")
+
+
 def main():
     texto = redactar(prueba="--prueba" in sys.argv)
     if texto is None:
@@ -121,7 +150,7 @@ def main():
     print("Mensaje:\n" + texto + "\n")
 
     errores = []
-    for enviar in (enviar_email, enviar_whatsapp):
+    for enviar in (enviar_email, enviar_whatsapp, enviar_telegram):
         try:
             enviar(texto)
         except Exception as e:  # un canal que falla no impide probar el otro

@@ -81,6 +81,12 @@
     </div>
   </section>
 
+  <section class="suscribir" id="telegram" hidden>
+    <p><strong>🔔 Avisos en Telegram</strong>: únete al canal y te avisará de nuevos eventos,
+       horas confirmadas y del evento del día siguiente.</p>
+    <div class="botones"><a id="telegram-enlace" target="_blank" rel="noopener">Unirme al canal</a></div>
+  </section>
+
   <div class="filtros" id="filtros">
     <button data-tipo="todos" aria-pressed="true">Todos</button>
     <button data-tipo="partido" aria-pressed="false">Partidos</button>
@@ -210,6 +216,18 @@
       b.setAttribute("aria-pressed", String(b === boton)));
     pintar();
   });
+
+  // Botón de Telegram: solo aparece si se ha configurado el canal (config.json lo crea el robot)
+  fetch("config.json")
+    .then(r => r.ok ? r.json() : {})
+    .then(cfg => {
+      const canal = (cfg.telegram || "").trim().replace(/^@/, "");
+      if (/^[A-Za-z0-9_]{5,}$/.test(canal)) {
+        document.getElementById("telegram-enlace").href = "https://t.me/" + canal;
+        document.getElementById("telegram").hidden = false;
+      }
+    })
+    .catch(() => {});
 
   fetch("eventos.json")
     .then(r => r.json())

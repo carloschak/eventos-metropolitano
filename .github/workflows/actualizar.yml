@@ -55,6 +55,7 @@ jobs:
         run: |
           mkdir web
           cp index.html eventos.json eventos.ics favicon.svg apple-touch-icon.png web/
+          echo '{"telegram": "${{ vars.TELEGRAM_CANAL }}"}' > web/config.json
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
@@ -72,5 +73,7 @@ jobs:
           EMAIL_DESTINO: ${{ secrets.EMAIL_DESTINO }}
           WHATSAPP_TELEFONO: ${{ secrets.WHATSAPP_TELEFONO }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CANAL: ${{ vars.TELEGRAM_CANAL }}
           WEB_URL: ${{ steps.publicar.outputs.page_url }}
         run: python avisar.py ${{ inputs.prueba && '--prueba' || '' }}

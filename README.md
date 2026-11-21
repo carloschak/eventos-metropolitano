@@ -9,7 +9,7 @@ Recoge los próximos partidos y conciertos del estadio y los muestra en una pág
 | `recoger_eventos.py` | El script que lee las webs y crea `eventos.json` |
 | `eventos.json` | Los eventos guardados (se regenera cada vez) |
 | `eventos.ics` | Los mismos eventos en formato calendario (Google, Apple, Outlook) |
-| `avisar.py` | Envía avisos por email y/o WhatsApp cuando hay novedades |
+| `avisar.py` | Envía avisos por email, WhatsApp y/o canal de Telegram cuando hay novedades |
 | `index.html` | La página que muestra los eventos |
 | `requirements.txt` | Librerías de Python que necesita el script |
 
@@ -107,7 +107,27 @@ texto de los mensajes, que aquí son solo eventos públicos).
    - `WHATSAPP_TELEFONO`: tu número con prefijo, p. ej. `+34600111222`
    - `WHATSAPP_APIKEY`: el número que te ha dado
 
+### Canal de Telegram (para los visitantes de la web)
+
+El robot publica las novedades en un canal público de Telegram; cualquiera puede unirse
+desde el botón de la web, sin dar su teléfono ni ningún dato.
+
+1. En Telegram: menú → **Nuevo canal** → ponle nombre → **Público** → elige el enlace,
+   p. ej. `t.me/eventos_metropolitano` (el nombre del canal es lo que va tras `t.me/`).
+2. Busca **@BotFather** (el oficial, con el tick azul) → escribe `/newbot` → dale un nombre
+   y un usuario terminado en `bot`. Te dará un **token** (algo como `123456:ABC-...`).
+   Es una contraseña: no la compartas.
+3. En tu canal: **Administradores → Añadir administrador** → busca tu bot → deja activado
+   **Publicar mensajes**.
+4. En GitHub (**Settings → Secrets and variables → Actions**):
+   - pestaña **Secrets** → `TELEGRAM_TOKEN`: el token del paso 2
+   - pestaña **Variables** → `TELEGRAM_CANAL`: el nombre del canal con @, p. ej. `@eventos_metropolitano`
+
+   La variable también hace aparecer el botón **"Unirme al canal"** en la web.
+
 ### Probar los avisos
 
 Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
 **"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.
+Ojo: si Telegram está configurado, la prueba también se publica en el canal (puedes
+borrarla después desde Telegram).
