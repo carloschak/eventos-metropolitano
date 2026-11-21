@@ -44,6 +44,7 @@
     }
 
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }  /* lo oculto siempre queda oculto */
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 64px; }  /* que la barra fija no tape los títulos */
     body {
@@ -67,8 +68,37 @@
     .marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; color: var(--texto); }
     .marca:hover { text-decoration: none; }
     .marca img { width: 26px; height: 26px; }
-    .barra nav a { font-size: 13px; color: var(--texto); opacity: .8; margin-left: 22px; }
-    .barra nav a:hover { opacity: 1; text-decoration: none; }
+    .barra nav > a:not(.icono) { font-size: 13px; color: var(--texto); opacity: .8; margin-right: 10px; }
+    .barra nav > a:not(.icono):hover { opacity: 1; text-decoration: none; }
+    .barra nav { display: flex; align-items: center; gap: 4px; }
+
+    /* Iconos minimalistas de la barra (calendario y Telegram) */
+    .icono {
+      width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+      color: var(--texto); cursor: pointer; transition: background .2s;
+    }
+    .icono:hover { background: var(--segmento); text-decoration: none; }
+    .icono svg, .boton svg, .boton-sec svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .boton svg, .boton-sec svg { width: 18px; height: 18px; }
+
+    /* Menú desplegable (usa <details>, sin librerías) */
+    details.desplegable { position: relative; }
+    details.desplegable summary { list-style: none; }
+    details.desplegable summary::-webkit-details-marker { display: none; }
+    .menu {
+      position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; min-width: 230px; text-align: left;
+      background: var(--superficie); border: 1px solid var(--linea); border-radius: 14px; padding: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.16); animation: aparecer .18s ease both;
+    }
+    .menu small { display: block; color: var(--secundario); font-size: 12px; padding: 8px 12px 4px; }
+    .menu a { display: block; padding: 10px 12px; border-radius: 10px; color: var(--texto); font-size: 14px; cursor: pointer; }
+    .menu a:hover { background: var(--segmento); text-decoration: none; }
+    .cta details.desplegable .menu { right: auto; left: 50%; transform: translateX(-50%); }
+
+    /* Botones de suscripción de la portada */
+    .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+    .cta .boton, .cta .boton-sec { font-size: 16px; padding: 11px 22px; gap: 8px; cursor: pointer; }
+    .cta summary.boton { user-select: none; }
 
     /* Portada */
     .portada { text-align: center; padding: 72px 0 40px; }
@@ -179,7 +209,6 @@
     /* Móvil */
     @media (max-width: 640px) {
       .contenedor { padding: 0 16px; }
-      .barra nav a { margin-left: 16px; }
       .portada { padding: 48px 0 28px; }
       .destacado { grid-template-columns: 1fr; padding: 32px 24px; border-radius: 24px; margin-bottom: 48px; }
       .cuenta { text-align: left; order: -1; display: flex; align-items: baseline; gap: 8px; }
@@ -202,7 +231,20 @@
 <header class="barra">
   <div class="contenedor">
     <a class="marca" href="#"><img src="favicon.svg" alt="">Metropolitano</a>
-    <nav><a href="#eventos">Eventos</a><a href="#suscribir">Suscribirse</a></nav>
+    <nav>
+      <a href="#eventos">Eventos</a>
+      <details class="desplegable">
+        <summary class="icono" title="Suscribirse al calendario" aria-label="Suscribirse al calendario"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></summary>
+        <div class="menu" role="menu">
+          <small>Suscribirse al calendario</small>
+          <a class="lnk-google" target="_blank" rel="noopener" role="menuitem">Google Calendar</a>
+          <a class="lnk-webcal" role="menuitem">Apple / Outlook</a>
+          <a href="eventos.ics" download role="menuitem">Descargar archivo .ics</a>
+        </div>
+      </details>
+      <a class="icono lnk-telegram solo-telegram" hidden target="_blank" rel="noopener"
+         title="Avisos en Telegram" aria-label="Avisos en Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3.5 2.8 10.6c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22.2 4.7c.2-.8-.5-1.5-1.2-1.2zM7.6 13.5 18 7"/></svg></a>
+    </nav>
   </div>
 </header>
 
@@ -210,6 +252,18 @@
   <section class="portada">
     <h1>Eventos estadio Metropolitano Madrid</h1>
     <p class="lema">Partidos y conciertos en el Riyadh Air Metropolitano, siempre al día.</p>
+    <div class="cta">
+      <details class="desplegable">
+        <summary class="boton"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Suscribirme al calendario</summary>
+        <div class="menu" role="menu">
+          <small>Suscribirse al calendario</small>
+          <a class="lnk-google" target="_blank" rel="noopener" role="menuitem">Google Calendar</a>
+          <a class="lnk-webcal" role="menuitem">Apple / Outlook</a>
+          <a href="eventos.ics" download role="menuitem">Descargar archivo .ics</a>
+        </div>
+      </details>
+      <a class="boton-sec lnk-telegram solo-telegram" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3.5 2.8 10.6c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22.2 4.7c.2-.8-.5-1.5-1.2-1.2zM7.6 13.5 18 7"/></svg>Avisos en Telegram</a>
+    </div>
     <p class="estado" id="estado">Cargando eventos…</p>
   </section>
 
@@ -240,19 +294,19 @@
         <h3>Calendario</h3>
         <p>Suscríbete y los eventos aparecerán solos en tu calendario, con los cambios de hora incluidos.</p>
         <div class="acciones">
-          <a class="boton" id="sus-google" target="_blank" rel="noopener">Google Calendar</a>
-          <a class="boton-sec" id="sus-webcal">Apple / Outlook</a>
+          <a class="boton lnk-google" target="_blank" rel="noopener">Google Calendar</a>
+          <a class="boton-sec lnk-webcal">Apple / Outlook</a>
           <a class="boton-sec" href="eventos.ics" download>Descargar .ics</a>
         </div>
       </div>
-      <div class="tile" id="telegram" hidden>
+      <div class="tile solo-telegram" hidden>
         <svg viewBox="0 0 40 40" aria-hidden="true">
           <circle cx="20" cy="20" r="18" fill="#2aabee"/>
           <path d="M9.5 19.6l17.2-6.6c.8-.3 1.5.2 1.2 1.4l-2.9 13.8c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.5.4-.9.4l.3-4.6 8.4-7.6c.4-.3-.1-.5-.6-.2l-10.4 6.5-4.5-1.4c-1-.3-1-1 .5-1.3z" fill="#fff"/>
         </svg>
         <h3>Avisos en Telegram</h3>
         <p>Únete al canal: te avisará de nuevos eventos, horas confirmadas y del evento del día siguiente.</p>
-        <div class="acciones"><a class="boton" id="telegram-enlace" target="_blank" rel="noopener">Unirme al canal</a></div>
+        <div class="acciones"><a class="boton lnk-telegram" target="_blank" rel="noopener">Unirme al canal</a></div>
       </div>
     </div>
   </section>
@@ -270,9 +324,20 @@
 
   // Dirección del calendario completo, para suscribirse
   const urlIcs = new URL("eventos.ics", location.href);
-  document.getElementById("sus-webcal").href = "webcal://" + urlIcs.host + urlIcs.pathname;
-  document.getElementById("sus-google").href =
-    "https://calendar.google.com/calendar/r?cid=" + encodeURIComponent("webcal://" + urlIcs.host + urlIcs.pathname);
+  const webcal = "webcal://" + urlIcs.host + urlIcs.pathname;
+  document.querySelectorAll(".lnk-webcal").forEach(a => a.href = webcal);
+  document.querySelectorAll(".lnk-google").forEach(a =>
+    a.href = "https://calendar.google.com/calendar/r?cid=" + encodeURIComponent(webcal));
+
+  // Cerrar los menús desplegables al pulsar fuera, al elegir una opción o con la tecla Esc
+  const cerrarMenus = (excepto) => document.querySelectorAll("details.desplegable[open]")
+    .forEach(d => { if (d !== excepto) d.open = false; });
+  document.addEventListener("click", ev => {
+    const d = ev.target.closest("details.desplegable");
+    cerrarMenus(d);
+    if (d && ev.target.closest(".menu a")) setTimeout(() => d.open = false, 0);
+  });
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape") cerrarMenus(); });
 
   // Separa "Atlético de Madrid - Viking FK (UEFA Champions League. Jornada 5)"
   // en título ("Atlético de Madrid – Viking FK") y competición ("UEFA Champions League · Jornada 5")
@@ -450,8 +515,8 @@
     .then(cfg => {
       const canal = (cfg.telegram || "").trim().replace(/^@/, "");
       if (/^[A-Za-z0-9_]{5,}$/.test(canal)) {
-        document.getElementById("telegram-enlace").href = "https://t.me/" + canal;
-        document.getElementById("telegram").hidden = false;
+        document.querySelectorAll(".lnk-telegram").forEach(a => a.href = "https://t.me/" + canal);
+        document.querySelectorAll(".solo-telegram").forEach(el => el.hidden = false);
       }
     })
     .catch(() => {});
