@@ -15,6 +15,7 @@ Uso:
 import hashlib
 import json
 import re
+import sys
 import time
 import unicodedata
 from datetime import date, datetime, timedelta
@@ -51,12 +52,20 @@ PAUSA_ENTRE_PETICIONES = 0.5  # segundos, para no saturar las webs
 # Utilidades
 # ---------------------------------------------------------------------------
 
-def descargar(url):
-    """Descarga una página y devuelve su HTML como texto."""
-    respuesta = requests.get(url, headers=CABECERAS, timeout=30)
-    respuesta.raise_for_status()  # si la web responde con error, lanza excepción
-    time.sleep(PAUSA_ENTRE_PETICIONES)
-    return respuesta.text
+def descargar(url, intentos=3):
+    """Descarga una página y devuelve su HTML como texto.
+    Si la conexión falla o la web da un error temporal, lo reintenta."""
+    for intento in range(1, intentos + 1):
+        try:
+            respuesta = requests.get(url, headers=CABECERAS, timeout=30)
+            if respuesta.status_code < 500 or intento == intentos:
+                respuesta.raise_for_status()  # si la web responde con error, lanza excepción
+                time.sleep(PAUSA_ENTRE_PETICIONES)
+                return respuesta.text
+        except (requests.ConnectionError, requests.Timeout):
+            if intento == intentos:
+                raise
+        time.sleep(5 * intento)  # espera 5 s, luego 10 s… antes de reintentar
 
 
 def normalizar(texto):
@@ -158,7 +167,11 @@ def leer_evento_esmadrid(url):
 
 def recoger_esmadrid():
     print("esmadrid.com: buscando eventos…")
-    enlaces = enlaces_busqueda_esmadrid()
+    try:
+        enlaces = enlaces_busqueda_esmadrid()
+    except requests.RequestException as e:
+        print(f"  Aviso: no se pudo usar el buscador de esmadrid ({e}).")
+        return []
     print(f"  {len(enlaces)} resultados en el buscador; revisando cada uno…")
     eventos = []
     for url in enlaces:
@@ -188,7 +201,7 @@ def recoger_atletico():
     try:
         html = descargar(ATLETICO_CALENDARIO)
     except requests.RequestException as e:
-        print(f"  Aviso: la web del Atlético no permite el acceso ({e}). Se omite.")
+        print(f"  Aviso: no se pudo leer la web del Atlético ({e}). Se omite.")
         return []
 
     eventos = []
@@ -350,6 +363,10 @@ def main():
         anteriores = json.loads(ARCHIVO_SALIDA.read_text(encoding="utf-8")).get("eventos", [])
 
     recientes = combinar([recoger_atletico(), recoger_esmadrid()])
+    if not recientes:
+        # Ninguna web ha respondido: no tocamos los archivos y avisamos con un error
+        print("\nERROR: no se ha podido recoger ningún evento. Se conservan los datos anteriores.")
+        sys.exit(1)
     cambios = detectar_cambios(recientes, anteriores, hoy)
 
     # Los datos nuevos van primero para que tengan prioridad sobre los viejos
