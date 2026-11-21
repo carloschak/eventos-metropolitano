@@ -44,8 +44,9 @@ Abre una terminal en esta carpeta.
   datos estructurados de la página (título, fechas, lugar), la hora del apartado
   "Horarios" y el tipo del apartado "Tipo". Solo guarda lo que es en el Metropolitano y
   todavía no ha pasado.
-- **atleticodemadrid.com**: el script lo intenta, pero la web tiene una protección
-  anti-robots y suele responder "403 Forbidden". En ese caso lo avisa y sigue.
+  La agenda de esmadrid incluye todos los partidos del Atlético en el Metropolitano.
+  (La web del club no se usa: tiene una protección anti-robots para impedir la lectura
+  automática.)
 - **Sin duplicados**: dos eventos son el mismo si coinciden tipo, fecha y título
   (sin contar mayúsculas ni tildes); dos partidos el mismo día cuentan como uno.
   Si un evento aparece repetido, se combinan sus datos (por ejemplo, la hora).

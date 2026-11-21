@@ -2,11 +2,8 @@
 Recoge los próximos eventos del Estadio Riyadh Air Metropolitano (Madrid)
 y los guarda en eventos.json, sin duplicados.
 
-Fuentes:
-  1. esmadrid.com (web oficial de turismo de Madrid): partidos y conciertos.
-  2. atleticodemadrid.com (web oficial del club): se intenta, pero la web tiene
-     una protección anti-robots (Cloudflare) que puede bloquear el acceso.
-     Si pasa, el script lo avisa y sigue con lo demás.
+Fuente: esmadrid.com (web oficial de turismo de Madrid), que incluye los
+partidos del Atlético en casa y los conciertos del estadio.
 
 Uso:
     python3 recoger_eventos.py
@@ -36,8 +33,6 @@ ARCHIVO_CAMBIOS = CARPETA / "cambios.json"  # novedades para avisar.py (no se su
 ESMADRID = "https://www.esmadrid.com"
 ESMADRID_BUSQUEDA = ESMADRID + "/agenda/busqueda?text=metropolitano&page={pagina}"
 MAX_PAGINAS = 10  # límite de seguridad para no recorrer páginas sin fin
-
-ATLETICO_CALENDARIO = "https://www.atleticodemadrid.com/calendario"
 
 # Palabra que debe aparecer en el lugar del evento para aceptarlo
 LUGAR_CLAVE = "metropolitano"
@@ -187,53 +182,13 @@ def recoger_esmadrid():
 
 
 # ---------------------------------------------------------------------------
-# Fuente 2: atleticodemadrid.com
-# ---------------------------------------------------------------------------
-
-def recoger_atletico():
-    """
-    Intenta leer el calendario oficial del club usando sus datos estructurados.
-    NOTA: esta parte no se ha podido probar porque la web bloquea el acceso
-    automático. Si algún día funciona, habrá que revisar que los datos son
-    correctos.
-    """
-    print("atleticodemadrid.com: intentando leer el calendario…")
-    try:
-        html = descargar(ATLETICO_CALENDARIO)
-    except requests.RequestException as e:
-        print(f"  Aviso: no se pudo leer la web del Atlético ({e}). Se omite.")
-        return []
-
-    eventos = []
-    for ev in eventos_jsonld(BeautifulSoup(html, "html.parser")):
-        lugar = (ev.get("location") or {}).get("name", "")
-        inicio = ev.get("startDate") or ""
-        if LUGAR_CLAVE not in normalizar(lugar) or len(inicio) < 10:
-            continue
-        m = re.search(r"T(\d{2}:\d{2})", inicio)
-        hora = m.group(1) if m and m.group(1) != "00:00" else None
-        eventos.append({
-            "fecha": inicio[:10],
-            "fecha_fin": None,
-            "hora": hora,
-            "tipo": "partido",
-            "titulo": ev.get("name", "").strip(),
-            "lugar": lugar,
-            "url": ev.get("url") or ATLETICO_CALENDARIO,
-            "fuente": "atleticodemadrid.com",
-        })
-    print(f"  {len(eventos)} partidos en el Metropolitano.")
-    return eventos
-
-
-# ---------------------------------------------------------------------------
 # Unir, quitar duplicados y guardar
 # ---------------------------------------------------------------------------
 
 def clave(ev):
     """Dos eventos son el mismo si coinciden tipo, fecha y título normalizado.
     Para partidos basta con la fecha: no hay dos partidos el mismo día en el
-    mismo estadio, aunque cada web escriba el título a su manera."""
+    mismo estadio, aunque el título cambie ligeramente de un día a otro."""
     if ev["tipo"] == "partido":
         return ("partido", ev["fecha"])
     return (ev["tipo"], ev["fecha"], normalizar(ev["titulo"]))
@@ -362,9 +317,9 @@ def main():
     if ARCHIVO_SALIDA.exists():
         anteriores = json.loads(ARCHIVO_SALIDA.read_text(encoding="utf-8")).get("eventos", [])
 
-    recientes = combinar([recoger_atletico(), recoger_esmadrid()])
+    recientes = combinar([recoger_esmadrid()])
     if not recientes:
-        # Ninguna web ha respondido: no tocamos los archivos y avisamos con un error
+        # esmadrid no ha respondido: no tocamos los archivos y avisamos con un error
         print("\nERROR: no se ha podido recoger ningún evento. Se conservan los datos anteriores.")
         sys.exit(1)
     cambios = detectar_cambios(recientes, anteriores, hoy)
