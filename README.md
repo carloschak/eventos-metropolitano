@@ -62,13 +62,18 @@ Abre una terminal en esta carpeta.
 
 ## Actualización automática (GitHub)
 
-El archivo `.github/workflows/actualizar.yml` le dice a GitHub que, **cada día a las 6:17
-(hora de Madrid en invierno)**, ejecute el script, guarde el `eventos.json` nuevo y
-vuelva a publicar la web en GitHub Pages.
+El archivo `.github/workflows/actualizar.yml` le dice a GitHub que, **cada día a las 10:00
+(hora de Madrid, también en verano)**, ejecute el script, guarde el `eventos.json` nuevo,
+vuelva a publicar la web en GitHub Pages y envíe los avisos. GitHub puede retrasar unos
+minutos las tareas programadas.
+
+Al subir cambios de código, el robot actualiza la web pero **no** envía avisos.
 
 - **Ver si ha funcionado**: pestaña **Actions** del repositorio. Verde = bien, rojo = error.
 - **Actualizar ahora mismo**: Actions → "Actualizar eventos y publicar web" → **Run workflow**.
-- **Cambiar la hora**: edita la línea `cron` del archivo (va en hora UTC).
+- **Cambiar la hora**: en el archivo hay dos líneas `cron` (va en hora UTC, sin horario de
+  verano): `0 8` es las 10:00 de Madrid en verano y `0 9` en invierno. Si las cambias,
+  cambia también esas mismas horas en el paso "comprobar" del archivo.
 
 ## Calendario
 

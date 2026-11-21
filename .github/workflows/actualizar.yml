@@ -1,10 +1,15 @@
 # Robot que actualiza los eventos y publica la web.
-# Se ejecuta: cada día, cuando se sube un cambio, o a mano desde la pestaña "Actions".
+# Se ejecuta: cada día a las 10:00 (hora de Madrid), cuando se sube un cambio,
+# o a mano desde la pestaña "Actions".
 name: Actualizar eventos y publicar web
 
 on:
+  # GitHub usa hora UTC y no cambia al horario de verano. Las 10:00 de Madrid son
+  # las 09:00 UTC en invierno y las 08:00 UTC en verano: se programan las dos y el
+  # paso "hora" deja seguir solo la que corresponde.
   schedule:
-    - cron: "17 5 * * *"   # todos los días a las 05:17 UTC (06:17 en Madrid en invierno)
+    - cron: "0 8 * * *"    # 10:00 en Madrid en verano
+    - cron: "0 9 * * *"    # 10:00 en Madrid en invierno
   push:
     branches: [main]
   workflow_dispatch:       # permite lanzarlo a mano con un botón
@@ -24,7 +29,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Decide si esta ejecución programada es la de las 10:00 en Madrid
+  hora:
+    runs-on: ubuntu-latest
+    outputs:
+      seguir: ${{ steps.comprobar.outputs.seguir }}
+    steps:
+      - id: comprobar
+        run: |
+          desfase=$(TZ=Europe/Madrid date +%z)   # +0100 en invierno, +0200 en verano
+          programa="${{ github.event.schedule }}"
+          if [ "${{ github.event_name }}" != "schedule" ] \
+             || { [ "$programa" = "0 9 * * *" ] && [ "$desfase" = "+0100" ]; } \
+             || { [ "$programa" = "0 8 * * *" ] && [ "$desfase" = "+0200" ]; }; then
+            echo "seguir=si" >> "$GITHUB_OUTPUT"
+          else
+            echo "No es la ejecución de las 10:00 en Madrid (desfase $desfase); se salta."
+            echo "seguir=no" >> "$GITHUB_OUTPUT"
+          fi
+
   actualizar:
+    needs: hora
+    if: needs.hora.outputs.seguir == 'si'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -65,8 +91,11 @@ jobs:
         id: publicar
         uses: actions/deploy-pages@v4
 
-      # Va al final: si falla el envío, la web ya está publicada igualmente
+      # Va al final: si falla el envío, la web ya está publicada igualmente.
+      # Solo en la ejecución diaria o a mano: al subir cambios de código no se avisa
+      # (si no, el recordatorio de "mañana" se repetiría con cada cambio).
       - name: Enviar avisos
+        if: github.event_name != 'push'
         env:
           EMAIL_USUARIO: ${{ secrets.EMAIL_USUARIO }}
           EMAIL_CLAVE: ${{ secrets.EMAIL_CLAVE }}
