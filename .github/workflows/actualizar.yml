@@ -54,7 +54,7 @@ jobs:
       - name: Preparar la web
         run: |
           mkdir web
-          cp index.html eventos.json eventos.ics web/
+          cp index.html eventos.json eventos.ics favicon.svg apple-touch-icon.png web/
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
