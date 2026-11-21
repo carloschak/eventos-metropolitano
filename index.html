@@ -526,7 +526,7 @@
     .then(datos => {
       eventos = datos.eventos.sort((a, b) =>
         (a.fecha + (a.hora || "99:99")).localeCompare(b.fecha + (b.hora || "99:99")));
-      const act = aFecha(datos.actualizado).toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+      const act = aFecha(datos.actualizado).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
       const partidos = eventos.filter(e => e.tipo === "partido").length;
       const conciertos = eventos.filter(e => e.tipo === "concierto").length;
       document.getElementById("estado").textContent =
