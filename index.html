@@ -35,11 +35,10 @@
     .mes { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
            color: var(--suave); margin: 28px 0 10px; }
     .evento {
-      display: flex; gap: 16px; align-items: center; text-decoration: none; color: inherit;
+      display: flex; gap: 16px; align-items: center;
       background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px;
       padding: 14px 16px; margin-bottom: 10px;
     }
-    .evento:hover { border-color: var(--suave); }
     .dia { text-align: center; min-width: 52px; }
     .dia b { display: block; font-size: 1.6rem; line-height: 1; }
     .dia span { font-size: .8rem; color: var(--suave); text-transform: capitalize; }
@@ -50,12 +49,35 @@
                 border: 1px solid currentColor; white-space: nowrap; }
     .partido { color: var(--rojo); } .concierto { color: var(--azul); } .otro { color: var(--morado); }
     .vacio { color: var(--suave); text-align: center; padding: 40px 0; }
+    .titulo a { color: inherit; text-decoration: none; }
+    .titulo a:hover { text-decoration: underline; }
+    .acciones { margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; font-size: .85rem; }
+    .acciones a { color: var(--azul); text-decoration: none; }
+    .acciones a:hover { text-decoration: underline; }
+    .suscribir { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px;
+                 padding: 14px 16px; margin-bottom: 20px; }
+    .suscribir p { margin: 0 0 10px; color: var(--suave); font-size: .9rem; }
+    .suscribir strong { color: var(--texto); }
+    .botones { display: flex; gap: 8px; flex-wrap: wrap; }
+    .botones a { font-size: .9rem; padding: 7px 14px; border-radius: 8px; text-decoration: none;
+                 border: 1px solid var(--borde); color: var(--texto); }
+    .botones a:hover { border-color: var(--suave); }
   </style>
 </head>
 <body>
 <main>
   <h1>Riyadh Air Metropolitano</h1>
   <p class="sub" id="sub">Cargando eventos…</p>
+
+  <section class="suscribir">
+    <p><strong>📅 Suscríbete al calendario</strong> y los eventos aparecerán solos en el tuyo,
+       con los cambios de hora incluidos.</p>
+    <div class="botones">
+      <a id="sus-google" target="_blank" rel="noopener">Google Calendar</a>
+      <a id="sus-webcal">Apple / Outlook</a>
+      <a href="eventos.ics" download>Descargar .ics</a>
+    </div>
+  </section>
 
   <div class="filtros" id="filtros">
     <button data-tipo="todos" aria-pressed="true">Todos</button>
@@ -68,6 +90,64 @@
 
 <script>
   const NOMBRE_TIPO = { partido: "Partido", concierto: "Concierto", otro: "Otro" };
+  const DURACION_HORAS = { partido: 2, concierto: 3, otro: 2 };  // igual que en recoger_eventos.py
+  const LUGAR = "Estadio Riyadh Air Metropolitano, Av. de Luis Aragonés s/n, Madrid";
+
+  // Dirección del calendario completo, para suscribirse
+  const urlIcs = new URL("eventos.ics", location.href);
+  document.getElementById("sus-webcal").href = "webcal://" + urlIcs.host + urlIcs.pathname;
+  document.getElementById("sus-google").href =
+    "https://calendar.google.com/calendar/r?cid=" + encodeURIComponent("webcal://" + urlIcs.host + urlIcs.pathname);
+
+  // Calcula inicio y fin de un evento como textos "AAAAMMDD" o "AAAAMMDDTHHMMSS"
+  function franja(e) {
+    const [a, m, d] = e.fecha.split("-").map(Number);
+    const fmt = (x, conHora) => {
+      const p = n => String(n).padStart(2, "0");
+      const dia = x.getUTCFullYear() + p(x.getUTCMonth() + 1) + p(x.getUTCDate());
+      return conHora ? dia + "T" + p(x.getUTCHours()) + p(x.getUTCMinutes()) + "00" : dia;
+    };
+    if (e.hora && !e.fecha_fin) {
+      const [h, mi] = e.hora.split(":").map(Number);
+      const ini = new Date(Date.UTC(a, m - 1, d, h, mi));
+      const fin = new Date(ini.getTime() + (DURACION_HORAS[e.tipo] || 2) * 3600e3);
+      return { conHora: true, ini: fmt(ini, true), fin: fmt(fin, true) };
+    }
+    const [a2, m2, d2] = (e.fecha_fin || e.fecha).split("-").map(Number);
+    return { conHora: false, ini: fmt(new Date(Date.UTC(a, m - 1, d))), fin: fmt(new Date(Date.UTC(a2, m2 - 1, d2 + 1))) };
+  }
+
+  function enlaceGoogle(e) {
+    const f = franja(e);
+    const p = new URLSearchParams({
+      action: "TEMPLATE", text: e.titulo, dates: f.ini + "/" + f.fin, ctz: "Europe/Madrid",
+      location: LUGAR, details: (e.hora ? "" : "Hora por confirmar\n") + e.url,
+    });
+    return "https://calendar.google.com/calendar/render?" + p;
+  }
+
+  // Crea un archivo .ics con un solo evento y lo descarga
+  function descargarIcs(e) {
+    const f = franja(e);
+    const esc = t => t.replace(/[\\;,]/g, c => "\\" + c);
+    const fechas = f.conHora
+      ? ["DTSTART;TZID=Europe/Madrid:" + f.ini, "DTEND;TZID=Europe/Madrid:" + f.fin]
+      : ["DTSTART;VALUE=DATE:" + f.ini, "DTEND;VALUE=DATE:" + f.fin];
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//eventos-metropolitano//ES",
+      "BEGIN:VEVENT", "UID:" + f.ini + "-" + Math.random().toString(36).slice(2) + "@eventos-metropolitano",
+      "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z",
+      ...fechas, "SUMMARY:" + esc(e.titulo), "LOCATION:" + esc(LUGAR), "URL:" + e.url,
+      "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    // Nombre de archivo sin tildes ni símbolos (algunos navegadores los rechazan)
+    a.download = e.titulo.normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + ".ics";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
   let eventos = [];
   let filtro = "todos";
 
@@ -96,19 +176,27 @@
       }
       cuando += " · " + (e.hora ? e.hora + " h" : "hora por confirmar");
 
-      const a = document.createElement("a");
-      a.className = "evento";
-      a.href = e.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.innerHTML = `
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "evento";
+      tarjeta.innerHTML = `
         <div class="dia"><b>${f.getDate()}</b><span>${f.toLocaleDateString("es-ES", { weekday: "short" })}</span></div>
-        <div class="info"><div class="titulo"></div><div class="detalle"></div></div>
+        <div class="info">
+          <div class="titulo"><a target="_blank" rel="noopener"></a></div>
+          <div class="detalle"></div>
+          <div class="acciones">
+            <a class="g" target="_blank" rel="noopener">+ Google</a>
+            <a class="ics" href="#">+ Apple/Outlook</a>
+          </div>
+        </div>
         <span class="etiqueta ${e.tipo}">${NOMBRE_TIPO[e.tipo] || e.tipo}</span>`;
       // textContent evita que un título raro rompa la página
-      a.querySelector(".titulo").textContent = e.titulo;
-      a.querySelector(".detalle").textContent = cuando;
-      lista.appendChild(a);
+      const enlace = tarjeta.querySelector(".titulo a");
+      enlace.textContent = e.titulo;
+      enlace.href = e.url;
+      tarjeta.querySelector(".detalle").textContent = cuando;
+      tarjeta.querySelector(".g").href = enlaceGoogle(e);
+      tarjeta.querySelector(".ics").addEventListener("click", ev => { ev.preventDefault(); descargarIcs(e); });
+      lista.appendChild(tarjeta);
     }
   }
 

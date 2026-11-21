@@ -8,6 +8,8 @@ Recoge los próximos partidos y conciertos del estadio y los muestra en una pág
 |---|---|
 | `recoger_eventos.py` | El script que lee las webs y crea `eventos.json` |
 | `eventos.json` | Los eventos guardados (se regenera cada vez) |
+| `eventos.ics` | Los mismos eventos en formato calendario (Google, Apple, Outlook) |
+| `avisar.py` | Envía avisos por email y/o WhatsApp cuando hay novedades |
 | `index.html` | La página que muestra los eventos |
 | `requirements.txt` | Librerías de Python que necesita el script |
 
@@ -66,3 +68,46 @@ vuelva a publicar la web en GitHub Pages.
 - **Ver si ha funcionado**: pestaña **Actions** del repositorio. Verde = bien, rojo = error.
 - **Actualizar ahora mismo**: Actions → "Actualizar eventos y publicar web" → **Run workflow**.
 - **Cambiar la hora**: edita la línea `cron` del archivo (va en hora UTC).
+
+## Calendario
+
+En la web, el recuadro **"Suscríbete al calendario"** añade todos los eventos a tu
+calendario y los mantiene al día solos (Google Calendar puede tardar hasta un día en
+refrescar). Cada evento tiene además botones para añadirlo suelto.
+
+## Avisos por email y WhatsApp
+
+`avisar.py` manda un mensaje cuando aparece un **evento nuevo**, cuando se **confirma o
+cambia una hora**, y el día antes de cada evento (**"mañana en el Metropolitano"**).
+Si no hay nada que contar, no manda nada.
+
+Las llaves se guardan como **Secrets** del repositorio (nunca en el código):
+**Settings → Secrets and variables → Actions → New repository secret**.
+Cada canal funciona solo si tiene sus secrets; puedes activar uno, otro o los dos.
+
+### Email (Gmail)
+
+1. Tu cuenta de Google necesita la **verificación en dos pasos** activada.
+2. Crea una **contraseña de aplicación** en https://myaccount.google.com/apppasswords
+   (ponle de nombre "Metropolitano"). Google te dará 16 letras.
+3. Crea estos secrets:
+   - `EMAIL_USUARIO`: tu dirección de Gmail
+   - `EMAIL_CLAVE`: las 16 letras (sin espacios)
+   - `EMAIL_DESTINO` (opcional): otra dirección a la que enviar; si no, te llega a ti misma
+
+### WhatsApp (CallMeBot)
+
+CallMeBot es un servicio gratuito para avisos personales (no oficial de WhatsApp; ve el
+texto de los mensajes, que aquí son solo eventos públicos).
+
+1. Sigue las instrucciones de https://www.callmebot.com/blog/free-api-whatsapp-messages/
+   (añadir su número a tus contactos y enviarle un mensaje de activación).
+2. Te responderá con tu **apikey**.
+3. Crea estos secrets:
+   - `WHATSAPP_TELEFONO`: tu número con prefijo, p. ej. `+34600111222`
+   - `WHATSAPP_APIKEY`: el número que te ha dado
+
+### Probar los avisos
+
+Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
+**"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.

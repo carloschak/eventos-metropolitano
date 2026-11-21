@@ -1,0 +1,262 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//eventos-metropolitano//ES
+CALSCALE:GREGORIAN
+X-WR-CALNAME:Riyadh Air Metropolitano
+X-WR-TIMEZONE:Europe/Madrid
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+BEGIN:VTIMEZONE
+TZID:Europe/Madrid
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:c0fba09022bf02a368b5fd1465341bcd@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;TZID=Europe/Madrid:20261125T210000
+DTEND;TZID=Europe/Madrid:20261125T230000
+SUMMARY:Atlético de Madrid - Viking FK (UEFA Champions League. Fase Liga.
+  Jornada 5)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora: 21:00 h\nhttps://www.esmadrid.com/agenda/atletico-madrid
+ -viking-fk-uefa-champions-league-fase-liga-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-viking-fk-uefa-champio
+ ns-league-fase-liga-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:8c715b08c6006d80afe74ea267aa32ae@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20261206
+DTEND;VALUE=DATE:20261207
+SUMMARY:Atlético de Madrid - Real Betis (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-real-betis-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-real-betis-laliga-ea-s
+ ports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:e16dccccadbe3127c00446c4ca7276d0@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20261213
+DTEND;VALUE=DATE:20261214
+SUMMARY:Atlético de Madrid - Valencia CF (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-valencia-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-valencia-cf-laliga-ea-
+ sports-estadio-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:616cb6c714238ca13c3cdc605919c612@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270110
+DTEND;VALUE=DATE:20270111
+SUMMARY:Atlético de Madrid - R. Racing Club (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-r-racing-club-laliga-ea-sports-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-r-racing-club-laliga-e
+ a-sports-estadio-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:4cccfac7d0875bb3e8ee6deb907310b9@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270117
+DTEND;VALUE=DATE:20270118
+SUMMARY:Atlético de Madrid - Real Sociedad (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-real-sociedad-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-real-sociedad-laliga-e
+ a-sports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:0424db2cc37634d44afe83b038b1683a@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;TZID=Europe/Madrid:20270127T210000
+DTEND;TZID=Europe/Madrid:20270127T230000
+SUMMARY:Atlético de Madrid - Fenerbahçe SK (UEFA Champions League. Fase 
+ Liga. Jornada 8)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora: 21:00 h\nhttps://www.esmadrid.com/agenda/atletico-madrid
+ -fenerbahce-sk-uefa-champions-league-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-fenerbahce-sk-uefa-cha
+ mpions-league-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:9b04344e5b154571721b87ad3facf1f9@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270131
+DTEND;VALUE=DATE:20270201
+SUMMARY:Atlético de Madrid - RCD Espanyol (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-rcd-espanyol-laliga-ea-sports-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-rcd-espanyol-laliga-ea
+ -sports-estadio-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:bad602c1ec859219af051d5468d5b4b6@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270221
+DTEND;VALUE=DATE:20270222
+SUMMARY:Atlético de Madrid - Elche CF (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-elche-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-elche-cf-laliga-ea-spo
+ rts-estadio-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:b57b01c4c4347529c1877babbcf35c1d@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270307
+DTEND;VALUE=DATE:20270308
+SUMMARY:Atlético de Madrid - RC Celta de Vigo (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-rc-celta-vigo-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-rc-celta-vigo-laliga-e
+ a-sports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:56440deb20d313774ab389ba26e97b63@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270411
+DTEND;VALUE=DATE:20270412
+SUMMARY:Atlético de Madrid - Levante UD (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-levante-ud-laliga-ea-sports-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-levante-ud-laliga-ea-s
+ ports-estadio-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:8ca117ead217a89ebe9eab415d3e58e9@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270418
+DTEND;VALUE=DATE:20270419
+SUMMARY:Atlético de Madrid - Sevilla FC (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-sevilla-fc-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-sevilla-fc-laliga-ea-s
+ ports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:a29ea75be265e42292f9fdaa73bd1835@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270502
+DTEND;VALUE=DATE:20270503
+SUMMARY:Atlético de Madrid - Deportivo Alavés (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-deportivo-alaves-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-deportivo-alaves-lalig
+ a-ea-sports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:f6e9ac883e276dd04a3f3a54ba6e8274@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270516
+DTEND;VALUE=DATE:20270517
+SUMMARY:Atlético de Madrid - Rayo Vallecano (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-rayo-vallecano-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-rayo-vallecano-laliga-
+ ea-sports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:256cc145d293d96885ffd02a1984ff75@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270523
+DTEND;VALUE=DATE:20270524
+SUMMARY:Atlético de Madrid - Athletic Club Bilbao (LALIGA EA SPORTS)
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
+ adrid-athletic-club-bilbao-laliga-ea-sports-estadio-metropolitano
+URL:https://www.esmadrid.com/agenda/atletico-madrid-athletic-club-bilbao-l
+ aliga-ea-sports-estadio-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:257c28fbe5f1452f9f54da7048949d0a@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270605
+DTEND;VALUE=DATE:20270606
+SUMMARY:Final UEFA Champions League 2027
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/final-uefa
+ -champions-league-2027-estadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/final-uefa-champions-league-2027-estad
+ io-riyadh-air-metropolitano
+CATEGORIES:Partido
+END:VEVENT
+BEGIN:VEVENT
+UID:934a01753e71719e5c90ac16b2ef783f@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270624
+DTEND;VALUE=DATE:20270628
+SUMMARY:Karol G
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora: 20:00 h\nhttps://www.esmadrid.com/agenda/karol-g-estadio
+ -riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/karol-g-estadio-riyadh-air-metropolita
+ no
+CATEGORIES:Concierto
+END:VEVENT
+BEGIN:VEVENT
+UID:fde367adf6beb251db7b46a66b945f62@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270709
+DTEND;VALUE=DATE:20270710
+SUMMARY:Estopa
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/estopa-est
+ adio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/estopa-estadio-riyadh-air-metropolitan
+ o
+CATEGORIES:Concierto
+END:VEVENT
+BEGIN:VEVENT
+UID:62a85d36e97c2b10d147aefc3a80a72b@eventos-metropolitano
+DTSTAMP:20261121T000000Z
+DTSTART;VALUE=DATE:20270730
+DTEND;VALUE=DATE:20270803
+SUMMARY:Harry Styles
+LOCATION:Estadio Riyadh Air Metropolitano
+DESCRIPTION:Hora: 20:45 h\nhttps://www.esmadrid.com/agenda/harry-styles-es
+ tadio-riyadh-air-metropolitano
+URL:https://www.esmadrid.com/agenda/harry-styles-estadio-riyadh-air-metrop
+ olitano
+CATEGORIES:Concierto
+END:VEVENT
+END:VCALENDAR

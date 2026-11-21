@@ -12,11 +12,12 @@ Uso:
     python3 recoger_eventos.py
 """
 
+import hashlib
 import json
 import re
 import time
 import unicodedata
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import requests
@@ -28,6 +29,8 @@ from bs4 import BeautifulSoup
 
 CARPETA = Path(__file__).parent
 ARCHIVO_SALIDA = CARPETA / "eventos.json"
+ARCHIVO_CALENDARIO = CARPETA / "eventos.ics"
+ARCHIVO_CAMBIOS = CARPETA / "cambios.json"  # novedades para avisar.py (no se sube a GitHub)
 
 ESMADRID = "https://www.esmadrid.com"
 ESMADRID_BUSQUEDA = ESMADRID + "/agenda/busqueda?text=metropolitano&page={pagina}"
@@ -240,6 +243,104 @@ def combinar(listas):
     return list(resultado.values())
 
 
+def detectar_cambios(recientes, anteriores, hoy):
+    """Compara lo recogido hoy con lo guardado antes y devuelve las novedades:
+    eventos nuevos y horas que se han confirmado o cambiado."""
+    if not anteriores:
+        return []  # primera ejecución: no hay con qué comparar
+    previos = {clave(e): e for e in anteriores}
+    cambios = []
+    for ev in recientes:
+        if (ev.get("fecha_fin") or ev["fecha"]) < hoy:
+            continue
+        viejo = previos.get(clave(ev))
+        if viejo is None:
+            cambios.append({"motivo": "nuevo", "evento": ev})
+        elif ev.get("hora") and ev["hora"] != viejo.get("hora"):
+            cambios.append({"motivo": "hora", "evento": ev, "hora_anterior": viejo.get("hora")})
+    return cambios
+
+
+# ---------------------------------------------------------------------------
+# Calendario (.ics): el formato estándar que entienden Google, Apple y Outlook
+# ---------------------------------------------------------------------------
+
+DURACION_HORAS = {"partido": 2, "concierto": 3, "otro": 2}  # duración aproximada
+
+ZONA_MADRID = """BEGIN:VTIMEZONE
+TZID:Europe/Madrid
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE""".splitlines()
+
+
+def _escapar(texto):
+    return (texto.replace("\\", "\\\\").replace(";", "\\;")
+            .replace(",", "\\,").replace("\n", "\\n"))
+
+
+def _plegar(linea):
+    """El formato .ics pide líneas de 75 bytes como máximo; las largas se parten."""
+    datos = linea.encode("utf-8")
+    trozos = []
+    while len(datos) > 74:
+        corte = 74
+        while (datos[corte] & 0xC0) == 0x80:  # no partir una letra con tilde por la mitad
+            corte -= 1
+        trozos.append(datos[:corte])
+        datos = datos[corte:]
+    trozos.append(datos)
+    return "\r\n ".join(t.decode("utf-8") for t in trozos)
+
+
+def generar_ics(eventos, hoy):
+    sello = hoy.replace("-", "") + "T000000Z"
+    lineas = [
+        "BEGIN:VCALENDAR", "VERSION:2.0",
+        "PRODID:-//eventos-metropolitano//ES", "CALSCALE:GREGORIAN",
+        "X-WR-CALNAME:Riyadh Air Metropolitano", "X-WR-TIMEZONE:Europe/Madrid",
+        "REFRESH-INTERVAL;VALUE=DURATION:PT12H", "X-PUBLISHED-TTL:PT12H",
+        *ZONA_MADRID,
+    ]
+    for ev in eventos:
+        inicio = date.fromisoformat(ev["fecha"])
+        uid = hashlib.md5("|".join(clave(ev)).encode()).hexdigest()
+        lineas += ["BEGIN:VEVENT", f"UID:{uid}@eventos-metropolitano", f"DTSTAMP:{sello}"]
+        if ev.get("hora") and not ev.get("fecha_fin"):
+            h, m = map(int, ev["hora"].split(":"))
+            comienzo = datetime(inicio.year, inicio.month, inicio.day, h, m)
+            final = comienzo + timedelta(hours=DURACION_HORAS.get(ev["tipo"], 2))
+            lineas += [f"DTSTART;TZID=Europe/Madrid:{comienzo:%Y%m%dT%H%M%S}",
+                       f"DTEND;TZID=Europe/Madrid:{final:%Y%m%dT%H%M%S}"]
+        else:
+            # Sin hora (o varios días): evento de día completo
+            fin = date.fromisoformat(ev.get("fecha_fin") or ev["fecha"]) + timedelta(days=1)
+            lineas += [f"DTSTART;VALUE=DATE:{inicio:%Y%m%d}", f"DTEND;VALUE=DATE:{fin:%Y%m%d}"]
+        nota = f"Hora: {ev['hora']} h" if ev.get("hora") else "Hora por confirmar"
+        lineas += [
+            f"SUMMARY:{_escapar(ev['titulo'])}",
+            f"LOCATION:{_escapar(ev.get('lugar') or 'Estadio Riyadh Air Metropolitano')}",
+            f"DESCRIPTION:{_escapar(nota + chr(10) + ev['url'])}",
+            f"URL:{ev['url']}",
+            f"CATEGORIES:{ev['tipo'].capitalize()}",
+            "END:VEVENT",
+        ]
+    lineas.append("END:VCALENDAR")
+    return "\r\n".join(_plegar(l) for l in lineas) + "\r\n"
+
+
 def main():
     hoy = date.today().isoformat()
 
@@ -248,8 +349,11 @@ def main():
     if ARCHIVO_SALIDA.exists():
         anteriores = json.loads(ARCHIVO_SALIDA.read_text(encoding="utf-8")).get("eventos", [])
 
+    recientes = combinar([recoger_atletico(), recoger_esmadrid()])
+    cambios = detectar_cambios(recientes, anteriores, hoy)
+
     # Los datos nuevos van primero para que tengan prioridad sobre los viejos
-    eventos = combinar([recoger_atletico(), recoger_esmadrid(), anteriores])
+    eventos = combinar([recientes, anteriores])
 
     # Solo eventos que no han terminado
     eventos = [e for e in eventos if (e.get("fecha_fin") or e["fecha"]) >= hoy]
@@ -257,7 +361,10 @@ def main():
 
     salida = {"actualizado": hoy, "eventos": eventos}
     ARCHIVO_SALIDA.write_text(json.dumps(salida, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nGuardados {len(eventos)} eventos en {ARCHIVO_SALIDA.name}")
+    ARCHIVO_CALENDARIO.write_bytes(generar_ics(eventos, hoy).encode("utf-8"))
+    ARCHIVO_CAMBIOS.write_text(json.dumps(cambios, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\nGuardados {len(eventos)} eventos en {ARCHIVO_SALIDA.name} y {ARCHIVO_CALENDARIO.name}")
+    print(f"Novedades desde la última vez: {len(cambios)}")
 
 
 if __name__ == "__main__":

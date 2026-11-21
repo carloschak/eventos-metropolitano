@@ -8,6 +8,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:       # permite lanzarlo a mano con un botón
+    inputs:
+      prueba:
+        description: "Enviar un mensaje de prueba por email/WhatsApp"
+        type: boolean
+        default: false
 
 permissions:
   contents: write   # para guardar el eventos.json nuevo
@@ -39,17 +44,17 @@ jobs:
       - name: Recoger eventos
         run: python recoger_eventos.py
 
-      - name: Guardar eventos.json si ha cambiado
+      - name: Guardar eventos.json y eventos.ics si han cambiado
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add eventos.json
+          git add eventos.json eventos.ics
           git diff --staged --quiet || (git commit -m "Actualizar eventos" && git push)
 
       - name: Preparar la web
         run: |
           mkdir web
-          cp index.html eventos.json web/
+          cp index.html eventos.json eventos.ics web/
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
@@ -58,3 +63,14 @@ jobs:
       - name: Publicar la web
         id: publicar
         uses: actions/deploy-pages@v4
+
+      # Va al final: si falla el envío, la web ya está publicada igualmente
+      - name: Enviar avisos
+        env:
+          EMAIL_USUARIO: ${{ secrets.EMAIL_USUARIO }}
+          EMAIL_CLAVE: ${{ secrets.EMAIL_CLAVE }}
+          EMAIL_DESTINO: ${{ secrets.EMAIL_DESTINO }}
+          WHATSAPP_TELEFONO: ${{ secrets.WHATSAPP_TELEFONO }}
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+          WEB_URL: ${{ steps.publicar.outputs.page_url }}
+        run: python avisar.py ${{ inputs.prueba && '--prueba' || '' }}
