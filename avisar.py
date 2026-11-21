@@ -23,6 +23,7 @@ import json
 import os
 import smtplib
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -116,8 +117,8 @@ def enviar_whatsapp(texto):
 
 
 def enviar_telegram(texto):
-    token = os.environ.get("TELEGRAM_TOKEN")
-    canal = os.environ.get("TELEGRAM_CANAL")
+    token = (os.environ.get("TELEGRAM_TOKEN") or "").strip()  # por si se copió con espacios
+    canal = (os.environ.get("TELEGRAM_CANAL") or "").strip()
     if not (token and canal):
         print("Telegram: no configurado, se omite.")
         return
@@ -142,6 +143,20 @@ def enviar_telegram(texto):
     print("Telegram: publicado en el canal.")
 
 
+def con_reintentos(enviar, texto, intentos=3):
+    """Si la conexión se corta (fallo de red), espera y lo vuelve a intentar.
+    Si el servicio responde con un error de verdad (p. ej. token incorrecto),
+    no reintenta: el error se muestra directamente."""
+    for intento in range(1, intentos + 1):
+        try:
+            return enviar(texto)
+        except OSError as e:  # cortes de conexión, tiempo agotado, etc.
+            if intento == intentos:
+                raise
+            print(f"  Fallo de conexión ({e}); reintento {intento + 1} de {intentos} en {10 * intento} s…")
+            time.sleep(10 * intento)
+
+
 def main():
     texto = redactar(prueba="--prueba" in sys.argv)
     if texto is None:
@@ -152,7 +167,7 @@ def main():
     errores = []
     for enviar in (enviar_email, enviar_whatsapp, enviar_telegram):
         try:
-            enviar(texto)
+            con_reintentos(enviar, texto)
         except Exception as e:  # un canal que falla no impide probar el otro
             errores.append(f"{enviar.__name__}: {e}")
     if errores:
