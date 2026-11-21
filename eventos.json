@@ -1,0 +1,185 @@
+{
+  "actualizado": "2026-11-21",
+  "eventos": [
+    {
+      "fecha": "2026-11-25",
+      "fecha_fin": null,
+      "hora": "21:00",
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Viking FK (UEFA Champions League. Fase Liga. Jornada 5)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-viking-fk-uefa-champions-league-fase-liga-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2026-12-06",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Real Betis (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-real-betis-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2026-12-13",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Valencia CF (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-valencia-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-01-10",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - R. Racing Club (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-r-racing-club-laliga-ea-sports-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-01-17",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Real Sociedad (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-real-sociedad-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-01-27",
+      "fecha_fin": null,
+      "hora": "21:00",
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Fenerbahçe SK (UEFA Champions League. Fase Liga. Jornada 8)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-fenerbahce-sk-uefa-champions-league-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-01-31",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - RCD Espanyol (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-rcd-espanyol-laliga-ea-sports-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-02-21",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Elche CF (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-elche-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-03-07",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - RC Celta de Vigo (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-rc-celta-vigo-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-04-11",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Levante UD (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-levante-ud-laliga-ea-sports-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-04-18",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Sevilla FC (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-sevilla-fc-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-05-02",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Deportivo Alavés (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-deportivo-alaves-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-05-16",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Rayo Vallecano (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-rayo-vallecano-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-05-23",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Atlético de Madrid - Athletic Club Bilbao (LALIGA EA SPORTS)",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/atletico-madrid-athletic-club-bilbao-laliga-ea-sports-estadio-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-06-05",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "partido",
+      "titulo": "Final UEFA Champions League 2027",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/final-uefa-champions-league-2027-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-06-24",
+      "fecha_fin": "2027-06-27",
+      "hora": "20:00",
+      "tipo": "concierto",
+      "titulo": "Karol G",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/karol-g-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-07-09",
+      "fecha_fin": null,
+      "hora": null,
+      "tipo": "concierto",
+      "titulo": "Estopa",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/estopa-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    },
+    {
+      "fecha": "2027-07-30",
+      "fecha_fin": "2027-08-02",
+      "hora": "20:45",
+      "tipo": "concierto",
+      "titulo": "Harry Styles",
+      "lugar": "Estadio Riyadh Air Metropolitano",
+      "url": "https://www.esmadrid.com/agenda/harry-styles-estadio-riyadh-air-metropolitano",
+      "fuente": "esmadrid.com"
+    }
+  ]
+}

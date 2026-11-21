@@ -1,0 +1,60 @@
+# Robot que actualiza los eventos y publica la web.
+# Se ejecuta: cada día, cuando se sube un cambio, o a mano desde la pestaña "Actions".
+name: Actualizar eventos y publicar web
+
+on:
+  schedule:
+    - cron: "17 5 * * *"   # todos los días a las 05:17 UTC (06:17 en Madrid en invierno)
+  push:
+    branches: [main]
+  workflow_dispatch:       # permite lanzarlo a mano con un botón
+
+permissions:
+  contents: write   # para guardar el eventos.json nuevo
+  pages: write      # para publicar la web
+  id-token: write
+
+concurrency:
+  group: actualizar
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    steps:
+      - name: Descargar el proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar librerías
+        run: pip install -r requirements.txt
+
+      - name: Recoger eventos
+        run: python recoger_eventos.py
+
+      - name: Guardar eventos.json si ha cambiado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eventos.json
+          git diff --staged --quiet || (git commit -m "Actualizar eventos" && git push)
+
+      - name: Preparar la web
+        run: |
+          mkdir web
+          cp index.html eventos.json web/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - name: Publicar la web
+        id: publicar
+        uses: actions/deploy-pages@v4

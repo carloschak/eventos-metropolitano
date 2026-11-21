@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eventos Metropolitano</title>
+  <style>
+    /* Colores en un solo sitio: cámbialos aquí si quieres otro aspecto */
+    :root {
+      --fondo: #f6f5f2; --tarjeta: #ffffff; --texto: #1d1d1f; --suave: #6b6b70;
+      --borde: #e3e1dc; --rojo: #c8102e; --azul: #1f3a93; --morado: #7a3fb0;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fondo: #141416; --tarjeta: #1f1f23; --texto: #f0f0f2; --suave: #a0a0a8;
+        --borde: #33333a; --rojo: #ff5a6e; --azul: #8aa4ff; --morado: #c49bff;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--fondo); color: var(--texto);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-size: 1.7rem; margin: 0 0 4px; }
+    .sub { color: var(--suave); margin: 0 0 24px; font-size: .95rem; }
+
+    .filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filtros button {
+      font: inherit; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--borde); background: var(--tarjeta); color: var(--texto);
+    }
+    .filtros button[aria-pressed="true"] { background: var(--texto); color: var(--fondo); border-color: var(--texto); }
+
+    .mes { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+           color: var(--suave); margin: 28px 0 10px; }
+    .evento {
+      display: flex; gap: 16px; align-items: center; text-decoration: none; color: inherit;
+      background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 10px;
+    }
+    .evento:hover { border-color: var(--suave); }
+    .dia { text-align: center; min-width: 52px; }
+    .dia b { display: block; font-size: 1.6rem; line-height: 1; }
+    .dia span { font-size: .8rem; color: var(--suave); text-transform: capitalize; }
+    .info { flex: 1; min-width: 0; }
+    .titulo { font-weight: 600; overflow-wrap: anywhere; }
+    .detalle { color: var(--suave); font-size: .9rem; }
+    .etiqueta { font-size: .75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+                border: 1px solid currentColor; white-space: nowrap; }
+    .partido { color: var(--rojo); } .concierto { color: var(--azul); } .otro { color: var(--morado); }
+    .vacio { color: var(--suave); text-align: center; padding: 40px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Riyadh Air Metropolitano</h1>
+  <p class="sub" id="sub">Cargando eventos…</p>
+
+  <div class="filtros" id="filtros">
+    <button data-tipo="todos" aria-pressed="true">Todos</button>
+    <button data-tipo="partido" aria-pressed="false">Partidos</button>
+    <button data-tipo="concierto" aria-pressed="false">Conciertos</button>
+  </div>
+
+  <div id="lista"></div>
+</main>
+
+<script>
+  const NOMBRE_TIPO = { partido: "Partido", concierto: "Concierto", otro: "Otro" };
+  let eventos = [];
+  let filtro = "todos";
+
+  // Convierte "2026-11-25" en una fecha (a mediodía, para evitar líos de zona horaria)
+  const aFecha = (texto) => new Date(texto + "T12:00:00");
+
+  function pintar() {
+    const lista = document.getElementById("lista");
+    const visibles = eventos.filter(e => filtro === "todos" || e.tipo === filtro);
+    if (!visibles.length) {
+      lista.innerHTML = '<p class="vacio">No hay eventos de este tipo.</p>';
+      return;
+    }
+    let mesActual = "";
+    lista.innerHTML = "";
+    for (const e of visibles) {
+      const f = aFecha(e.fecha);
+      const mes = f.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
+      if (mes !== mesActual) {
+        mesActual = mes;
+        lista.insertAdjacentHTML("beforeend", `<h2 class="mes">${mes}</h2>`);
+      }
+      let cuando = f.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+      if (e.fecha_fin) {
+        cuando += " – " + aFecha(e.fecha_fin).toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+      }
+      cuando += " · " + (e.hora ? e.hora + " h" : "hora por confirmar");
+
+      const a = document.createElement("a");
+      a.className = "evento";
+      a.href = e.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.innerHTML = `
+        <div class="dia"><b>${f.getDate()}</b><span>${f.toLocaleDateString("es-ES", { weekday: "short" })}</span></div>
+        <div class="info"><div class="titulo"></div><div class="detalle"></div></div>
+        <span class="etiqueta ${e.tipo}">${NOMBRE_TIPO[e.tipo] || e.tipo}</span>`;
+      // textContent evita que un título raro rompa la página
+      a.querySelector(".titulo").textContent = e.titulo;
+      a.querySelector(".detalle").textContent = cuando;
+      lista.appendChild(a);
+    }
+  }
+
+  document.getElementById("filtros").addEventListener("click", (ev) => {
+    const boton = ev.target.closest("button");
+    if (!boton) return;
+    filtro = boton.dataset.tipo;
+    document.querySelectorAll("#filtros button").forEach(b =>
+      b.setAttribute("aria-pressed", String(b === boton)));
+    pintar();
+  });
+
+  fetch("eventos.json")
+    .then(r => r.json())
+    .then(datos => {
+      eventos = datos.eventos.sort((a, b) =>
+        (a.fecha + (a.hora || "99:99")).localeCompare(b.fecha + (b.hora || "99:99")));
+      const act = aFecha(datos.actualizado).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+      document.getElementById("sub").textContent =
+        `${eventos.length} próximos eventos · actualizado el ${act}`;
+      pintar();
+    })
+    .catch(() => {
+      document.getElementById("sub").textContent =
+        "No se pudo cargar eventos.json. ¿Has abierto la página con el servidor local? (mira el README)";
+    });
+</script>
+</body>
+</html>
