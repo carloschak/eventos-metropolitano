@@ -375,6 +375,23 @@
     return "https://calendar.google.com/calendar/render?" + p;
   }
 
+  // Dos avisos, igual que en el calendario completo (recoger_eventos.py):
+  // el día antes a las 10:00 y el mismo día (3 h antes, o a las 10:00 si no hay hora)
+  function alarmasIcs(e, conHora) {
+    let diaAntes, mismoDia;
+    if (conHora) {
+      const [h, m] = e.hora.split(":").map(Number);
+      diaAntes = -(24 * 60 + h * 60 + m - 600);
+      mismoDia = -180;
+    } else {
+      diaAntes = -840;
+      mismoDia = 600;
+    }
+    const alarma = (texto, min) => ["BEGIN:VALARM", "ACTION:DISPLAY",
+      "DESCRIPTION:" + texto, "TRIGGER:" + (min < 0 ? "-" : "") + "PT" + Math.abs(min) + "M", "END:VALARM"];
+    return [...alarma("Mañana en el Metropolitano", diaAntes), ...alarma("Hoy en el Metropolitano", mismoDia)];
+  }
+
   // Crea un archivo .ics con un solo evento y lo descarga
   function descargarIcs(e) {
     const f = franja(e);
@@ -386,7 +403,7 @@
       "BEGIN:VEVENT", "UID:" + f.ini + "-" + Math.random().toString(36).slice(2) + "@eventos-metropolitano",
       "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z",
       ...fechas, "SUMMARY:" + esc(e.titulo), "LOCATION:" + esc(LUGAR), "URL:" + e.url,
-      "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      ...alarmasIcs(e, f.conHora), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
     // Nombre de archivo sin tildes ni símbolos (algunos navegadores los rechazan)

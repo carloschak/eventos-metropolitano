@@ -36,6 +36,18 @@ DESCRIPTION:Hora: 21:00 h\nhttps://www.esmadrid.com/agenda/atletico-madrid
 URL:https://www.esmadrid.com/agenda/atletico-madrid-viking-fk-uefa-champio
  ns-league-fase-liga-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Viking FK (
+ UEFA Champions League. Fase Liga. Jornada 5)
+TRIGGER:-PT2100M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Viking FK (UEFA
+  Champions League. Fase Liga. Jornada 5)
+TRIGGER:-PT180M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:8c715b08c6006d80afe74ea267aa32ae@eventos-metropolitano
@@ -49,6 +61,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-real-betis-laliga-ea-s
  ports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Real Betis 
+ (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Real Betis (LAL
+ IGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:e16dccccadbe3127c00446c4ca7276d0@eventos-metropolitano
@@ -62,6 +86,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-valencia-cf-laliga-ea-
  sports-estadio-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Valencia CF
+  (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Valencia CF (LA
+ LIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:616cb6c714238ca13c3cdc605919c612@eventos-metropolitano
@@ -75,6 +111,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-r-racing-club-laliga-e
  a-sports-estadio-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - R. Racing C
+ lub (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - R. Racing Club 
+ (LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:4cccfac7d0875bb3e8ee6deb907310b9@eventos-metropolitano
@@ -88,6 +136,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-real-sociedad-laliga-e
  a-sports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Real Socied
+ ad (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Real Sociedad (
+ LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:0424db2cc37634d44afe83b038b1683a@eventos-metropolitano
@@ -102,6 +162,18 @@ DESCRIPTION:Hora: 21:00 h\nhttps://www.esmadrid.com/agenda/atletico-madrid
 URL:https://www.esmadrid.com/agenda/atletico-madrid-fenerbahce-sk-uefa-cha
  mpions-league-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Fenerbahçe
+  SK (UEFA Champions League. Fase Liga. Jornada 8)
+TRIGGER:-PT2100M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Fenerbahçe SK 
+ (UEFA Champions League. Fase Liga. Jornada 8)
+TRIGGER:-PT180M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:9b04344e5b154571721b87ad3facf1f9@eventos-metropolitano
@@ -115,6 +187,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-rcd-espanyol-laliga-ea
  -sports-estadio-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - RCD Espanyo
+ l (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - RCD Espanyol (L
+ ALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:bad602c1ec859219af051d5468d5b4b6@eventos-metropolitano
@@ -128,6 +212,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-elche-cf-laliga-ea-spo
  rts-estadio-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Elche CF (L
+ ALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Elche CF (LALIG
+ A EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:b57b01c4c4347529c1877babbcf35c1d@eventos-metropolitano
@@ -141,6 +237,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-rc-celta-vigo-laliga-e
  a-sports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - RC Celta de
+  Vigo (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - RC Celta de Vig
+ o (LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:56440deb20d313774ab389ba26e97b63@eventos-metropolitano
@@ -154,6 +262,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-levante-ud-laliga-ea-s
  ports-estadio-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Levante UD 
+ (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Levante UD (LAL
+ IGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:8ca117ead217a89ebe9eab415d3e58e9@eventos-metropolitano
@@ -167,6 +287,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-sevilla-fc-laliga-ea-s
  ports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Sevilla FC 
+ (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Sevilla FC (LAL
+ IGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:a29ea75be265e42292f9fdaa73bd1835@eventos-metropolitano
@@ -180,6 +312,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-deportivo-alaves-lalig
  a-ea-sports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Deportivo A
+ lavés (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Deportivo Alav
+ és (LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:f6e9ac883e276dd04a3f3a54ba6e8274@eventos-metropolitano
@@ -193,6 +337,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-rayo-vallecano-laliga-
  ea-sports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Rayo Vallec
+ ano (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Rayo Vallecano 
+ (LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:256cc145d293d96885ffd02a1984ff75@eventos-metropolitano
@@ -206,6 +362,18 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/atletico-m
 URL:https://www.esmadrid.com/agenda/atletico-madrid-athletic-club-bilbao-l
  aliga-ea-sports-estadio-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Athletic Cl
+ ub Bilbao (LALIGA EA SPORTS)
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Atlético de Madrid - Athletic Club B
+ ilbao (LALIGA EA SPORTS)
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:257c28fbe5f1452f9f54da7048949d0a@eventos-metropolitano
@@ -219,6 +387,16 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/final-uefa
 URL:https://www.esmadrid.com/agenda/final-uefa-champions-league-2027-estad
  io-riyadh-air-metropolitano
 CATEGORIES:Partido
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Final UEFA Champions League 2027
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Final UEFA Champions League 2027
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:934a01753e71719e5c90ac16b2ef783f@eventos-metropolitano
@@ -232,6 +410,16 @@ DESCRIPTION:Hora: 20:00 h\nhttps://www.esmadrid.com/agenda/karol-g-estadio
 URL:https://www.esmadrid.com/agenda/karol-g-estadio-riyadh-air-metropolita
  no
 CATEGORIES:Concierto
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Karol G
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Karol G
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fde367adf6beb251db7b46a66b945f62@eventos-metropolitano
@@ -245,6 +433,16 @@ DESCRIPTION:Hora por confirmar\nhttps://www.esmadrid.com/agenda/estopa-est
 URL:https://www.esmadrid.com/agenda/estopa-estadio-riyadh-air-metropolitan
  o
 CATEGORIES:Concierto
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Estopa
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Estopa
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:62a85d36e97c2b10d147aefc3a80a72b@eventos-metropolitano
@@ -258,5 +456,15 @@ DESCRIPTION:Hora: 20:45 h\nhttps://www.esmadrid.com/agenda/harry-styles-es
 URL:https://www.esmadrid.com/agenda/harry-styles-estadio-riyadh-air-metrop
  olitano
 CATEGORIES:Concierto
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mañana en el Metropolitano: Harry Styles
+TRIGGER:-PT840M
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy en el Metropolitano: Harry Styles
+TRIGGER:PT600M
+END:VALARM
 END:VEVENT
 END:VCALENDAR

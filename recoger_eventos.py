@@ -273,6 +273,29 @@ def _plegar(linea):
     return "\r\n ".join(t.decode("utf-8") for t in trozos)
 
 
+def _alarma(titulo, texto, minutos):
+    """Aviso del calendario. 'minutos' es respecto al inicio del evento:
+    negativo = antes, positivo = después (sirve para los de día completo)."""
+    signo = "-" if minutos < 0 else ""
+    return ["BEGIN:VALARM", "ACTION:DISPLAY", f"DESCRIPTION:{_escapar(texto + ': ' + titulo)}",
+            f"TRIGGER:{signo}PT{abs(minutos)}M", "END:VALARM"]
+
+
+def alarmas(ev, con_hora):
+    """Dos avisos: el día antes a las 10:00 y el mismo día
+    (3 horas antes si hay hora; a las 10:00 si es de día completo)."""
+    if con_hora:
+        h, m = map(int, ev["hora"].split(":"))
+        desde_10 = h * 60 + m - 10 * 60           # minutos entre las 10:00 y el inicio
+        dia_antes = -(24 * 60 + desde_10)
+        mismo_dia = -180
+    else:                                         # empieza a las 00:00
+        dia_antes = -14 * 60                      # 10:00 del día anterior
+        mismo_dia = 10 * 60                       # 10:00 del mismo día
+    return (_alarma(ev["titulo"], "Mañana en el Metropolitano", dia_antes)
+            + _alarma(ev["titulo"], "Hoy en el Metropolitano", mismo_dia))
+
+
 def generar_ics(eventos, hoy):
     sello = hoy.replace("-", "") + "T000000Z"
     lineas = [
@@ -286,7 +309,8 @@ def generar_ics(eventos, hoy):
         inicio = date.fromisoformat(ev["fecha"])
         uid = hashlib.md5("|".join(clave(ev)).encode()).hexdigest()
         lineas += ["BEGIN:VEVENT", f"UID:{uid}@eventos-metropolitano", f"DTSTAMP:{sello}"]
-        if ev.get("hora") and not ev.get("fecha_fin"):
+        con_hora = bool(ev.get("hora") and not ev.get("fecha_fin"))
+        if con_hora:
             h, m = map(int, ev["hora"].split(":"))
             comienzo = datetime(inicio.year, inicio.month, inicio.day, h, m)
             final = comienzo + timedelta(hours=DURACION_HORAS.get(ev["tipo"], 2))
@@ -303,6 +327,7 @@ def generar_ics(eventos, hoy):
             f"DESCRIPTION:{_escapar(nota + chr(10) + ev['url'])}",
             f"URL:{ev['url']}",
             f"CATEGORIES:{ev['tipo'].capitalize()}",
+            *alarmas(ev, con_hora),
             "END:VEVENT",
         ]
     lineas.append("END:VCALENDAR")

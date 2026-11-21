@@ -81,10 +81,16 @@ En la web, el recuadro **"Suscríbete al calendario"** añade todos los eventos 
 calendario y los mantiene al día solos (Google Calendar puede tardar hasta un día en
 refrescar). Cada evento tiene además botones para añadirlo suelto.
 
+Cada evento lleva **dos avisos**: el día antes a las 10:00 y el mismo día (3 horas antes si
+tiene hora; a las 10:00 si la hora está por confirmar). Apple Calendar los respeta; Google
+Calendar suele ignorar los avisos de calendarios suscritos (en ese caso, ponlos a mano en
+la configuración de ese calendario dentro de Google Calendar).
+
 ## Avisos por email y WhatsApp
 
 `avisar.py` manda un mensaje cuando aparece un **evento nuevo**, cuando se **confirma o
-cambia una hora**, y el día antes de cada evento (**"mañana en el Metropolitano"**).
+cambia una hora**, el día antes de cada evento (**"Mañana en el Metropolitano"**) y el
+mismo día (**"Hoy en el Metropolitano"**), siempre a las 10:00.
 Si no hay nada que contar, no manda nada.
 
 Las llaves se guardan como **Secrets** del repositorio (nunca en el código):

@@ -2,7 +2,8 @@
 Envía avisos por email y/o WhatsApp cuando:
   - aparece un evento nuevo,
   - se confirma o cambia la hora de un evento,
-  - hay un evento mañana.
+  - hay un evento mañana (recordatorio del día antes),
+  - hay un evento hoy (recordatorio del mismo día).
 
 Se ejecuta después de recoger_eventos.py (que deja las novedades en cambios.json).
 
@@ -60,12 +61,18 @@ def redactar(prueba=False):
     """Prepara el texto del aviso. Devuelve None si no hay nada que contar."""
     eventos = leer_json("eventos.json", {"eventos": []})["eventos"]
     cambios = leer_json("cambios.json", [])
-    manana = (datetime.now(ZoneInfo("Europe/Madrid")).date() + timedelta(days=1)).isoformat()
+    hoy = datetime.now(ZoneInfo("Europe/Madrid")).date()
+    manana = (hoy + timedelta(days=1)).isoformat()
+    hoy = hoy.isoformat()
 
     partes = []
     if prueba:
         partes.append("✅ Mensaje de prueba: los avisos funcionan.\n\nPróximos eventos:\n"
                       + "\n".join(describir(e) for e in eventos[:3]))
+
+    de_hoy = [e for e in eventos if e["fecha"] == hoy]
+    if de_hoy:
+        partes.append("🏟️ Hoy en el Metropolitano:\n" + "\n".join(describir(e) for e in de_hoy))
 
     de_manana = [e for e in eventos if e["fecha"] == manana]
     if de_manana:
