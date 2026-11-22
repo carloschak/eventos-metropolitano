@@ -37,7 +37,7 @@ BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Viking FK (
  UEFA Champions League. Fase Liga. Jornada 5)
-TRIGGER:-PT2100M
+TRIGGER:-PT1440M
 END:VALARM
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -148,7 +148,7 @@ BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Mañana en el Metropolitano: Atlético de Madrid - Fenerbahçe
   SK (UEFA Champions League. Fase Liga. Jornada 8)
-TRIGGER:-PT2100M
+TRIGGER:-PT1440M
 END:VALARM
 BEGIN:VALARM
 ACTION:DISPLAY

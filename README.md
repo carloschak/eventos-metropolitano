@@ -81,8 +81,8 @@ En la web, el recuadro **"Suscríbete al calendario"** añade todos los eventos 
 calendario y los mantiene al día solos (Google Calendar puede tardar hasta un día en
 refrescar). Cada evento tiene además botones para añadirlo suelto.
 
-Cada evento lleva **dos avisos**: el día antes a las 10:00 y el mismo día (3 horas antes si
-tiene hora; a las 10:00 si la hora está por confirmar). Apple Calendar los respeta; Google
+Cada evento lleva **dos avisos**: 24 horas antes y 3 horas antes. Si la hora está por
+confirmar, a las 10:00 del día anterior y a las 10:00 del mismo día. Apple Calendar los respeta; Google
 Calendar suele ignorar los avisos de calendarios suscritos (en ese caso, ponlos a mano en
 la configuración de ese calendario dentro de Google Calendar).
 

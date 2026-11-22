@@ -372,12 +372,11 @@
   }
 
   // Dos avisos, igual que en el calendario completo (recoger_eventos.py):
-  // el día antes a las 10:00 y el mismo día (3 h antes, o a las 10:00 si no hay hora)
+  // 24 h y 3 h antes; sin hora, a las 10:00 del día anterior y del mismo día
   function alarmasIcs(e, conHora) {
     let diaAntes, mismoDia;
     if (conHora) {
-      const [h, m] = e.hora.split(":").map(Number);
-      diaAntes = -(24 * 60 + h * 60 + m - 600);
+      diaAntes = -24 * 60;
       mismoDia = -180;
     } else {
       diaAntes = -840;

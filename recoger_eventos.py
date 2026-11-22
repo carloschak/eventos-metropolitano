@@ -282,12 +282,10 @@ def _alarma(titulo, texto, minutos):
 
 
 def alarmas(ev, con_hora):
-    """Dos avisos: el día antes a las 10:00 y el mismo día
-    (3 horas antes si hay hora; a las 10:00 si es de día completo)."""
+    """Dos avisos: 24 horas antes y 3 horas antes si hay hora;
+    si es de día completo, a las 10:00 del día anterior y del mismo día."""
     if con_hora:
-        h, m = map(int, ev["hora"].split(":"))
-        desde_10 = h * 60 + m - 10 * 60           # minutos entre las 10:00 y el inicio
-        dia_antes = -(24 * 60 + desde_10)
+        dia_antes = -24 * 60                      # 24 horas antes
         mismo_dia = -180
     else:                                         # empieza a las 00:00
         dia_antes = -14 * 60                      # 10:00 del día anterior
