@@ -1,2 +1,9 @@
 __pycache__/
 cambios.json
+
+# Secretos y archivos locales: nunca se suben
+.env
+.dev.vars
+worker/.dev.vars
+worker/.wrangler/
+worker/node_modules/

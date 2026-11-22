@@ -1,0 +1,16 @@
+# Servidor de suscripciones a los avisos push (Cloudflare Worker).
+# Cómo desplegarlo: mira la sección "Avisos en el móvil" del README.
+name = "eventos-metropolitano-avisos"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+[vars]
+# Webs que pueden suscribirse (separadas por comas, sin barra final)
+ALLOWED_ORIGINS = "https://carloschak.github.io"
+
+# Base de datos donde se guardan las suscripciones.
+# Crea la tuya con `npx wrangler kv namespace create SUSCRIPCIONES` y pega aquí el id que te dé.
+# (El id no es secreto: sin tu cuenta de Cloudflare no sirve para nada.)
+[[kv_namespaces]]
+binding = "SUSCRIPCIONES"
+id = "PEGA_AQUI_EL_ID"

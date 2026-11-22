@@ -15,7 +15,7 @@ on:
   workflow_dispatch:       # permite lanzarlo a mano con un botón
     inputs:
       prueba:
-        description: "Enviar un mensaje de prueba por email/WhatsApp"
+        description: "Enviar un mensaje de prueba (email, WhatsApp, Telegram y avisos en el móvil)"
         type: boolean
         default: false
 
@@ -78,10 +78,16 @@ jobs:
           git diff --staged --quiet || (git commit -m "Actualizar eventos" && git push)
 
       - name: Preparar la web
+        env:
+          TELEGRAM_CANAL: ${{ vars.TELEGRAM_CANAL }}
+          PUSH_API: ${{ vars.PUSH_API }}
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
         run: |
           mkdir web
-          cp index.html eventos.json eventos.ics favicon.svg apple-touch-icon.png web/
-          echo '{"telegram": "${{ vars.TELEGRAM_CANAL }}"}' > web/config.json
+          cp -r index.html privacidad.html manifest.json sw.js iconos \
+                eventos.json eventos.ics favicon.svg apple-touch-icon.png web/
+          # config.json: datos públicos que lee la web (nunca secretos)
+          python -c 'import json, os; print(json.dumps({"telegram": os.environ["TELEGRAM_CANAL"], "push_api": os.environ["PUSH_API"], "vapid": os.environ["VAPID_PUBLIC_KEY"]}))' > web/config.json
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
@@ -104,5 +110,9 @@ jobs:
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CANAL: ${{ vars.TELEGRAM_CANAL }}
+          PUSH_API: ${{ vars.PUSH_API }}
+          PUSH_ADMIN_TOKEN: ${{ secrets.PUSH_ADMIN_TOKEN }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
           WEB_URL: ${{ steps.publicar.outputs.page_url }}
         run: python avisar.py ${{ inputs.prueba && '--prueba' || '' }}

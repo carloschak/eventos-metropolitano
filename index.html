@@ -6,7 +6,15 @@
   <title>Eventos estadio Metropolitano Madrid</title>
   <meta name="description" content="Próximos partidos y conciertos en el estadio Riyadh Air Metropolitano de Madrid.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <!-- App instalable (PWA): manifest, color de la barra del sistema y etiquetas de Apple -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Metropolitano">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -205,6 +213,41 @@
     .tile p { color: var(--secundario); margin: 0 0 22px; font-size: 16px; }
 
 
+    /* App instalable y avisos push */
+    .boton.instalar { background: var(--texto); color: var(--fondo); }
+    .boton.instalar:hover { background: var(--texto); opacity: .85; }
+    .tile .aviso-push { margin: 0; }
+    .tile .privacidad {
+      font-size: 13px; color: var(--secundario); margin: 18px 0 0; padding-top: 14px;
+      border-top: 1px solid var(--linea); line-height: 1.45;
+    }
+    .push-estado { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .push-ok { display: inline-flex; align-items: center; gap: 6px; color: #1a7f37; font-weight: 600; font-size: 15px; }
+    @media (prefers-color-scheme: dark) { .push-ok { color: #3fb950; } }
+    .push-ok svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; margin: 0; }
+    .enlace-boton { font: inherit; font-size: 14px; color: var(--acento); background: none; border: 0; padding: 0; cursor: pointer; }
+    .enlace-boton:hover { text-decoration: underline; }
+    .push-error { color: var(--rojo); font-size: 14px; margin: 10px 0 0 !important; }
+    .tile.avisos { margin: 0 0 64px; }
+    .tile.avisos h3 { margin-top: 0; }
+    .pie { text-align: center; font-size: 13px; padding: 48px 0 40px; margin: 0; }
+
+    /* Banner de iPhone: cómo añadir a la pantalla de inicio */
+    .banner-ios {
+      position: fixed; z-index: 30; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      max-width: 440px; margin: 0 auto;
+      display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: start;
+      background: var(--superficie); color: var(--texto); border-radius: 18px; padding: 14px 14px 14px 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25); border: 1px solid var(--linea);
+      animation: aparecer .3s ease both;
+    }
+    .banner-ios img { width: 44px; height: 44px; border-radius: 10px; }
+    .banner-ios b { display: block; font-size: 15px; }
+    .banner-ios p { margin: 2px 0 0; font-size: 14px; color: var(--secundario); line-height: 1.4; }
+    .banner-ios p strong { color: var(--texto); font-weight: 600; }
+    .banner-ios .compartir { width: 16px; height: 16px; vertical-align: -2px; fill: none; stroke: var(--acento); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .banner-ios button { font: inherit; font-size: 22px; line-height: 1; color: var(--secundario); background: none; border: 0; padding: 0 2px; cursor: pointer; }
+
     /* Móvil */
     @media (max-width: 640px) {
       .contenedor { padding: 0 16px; }
@@ -254,6 +297,8 @@
     <h1>Eventos estadio Metropolitano Madrid</h1>
     <p class="lema">Partidos y conciertos en el Riyadh Air Metropolitano, siempre al día.</p>
     <div class="cta">
+      <!-- Solo aparece en navegadores que permiten instalar la web con un botón (Chrome/Edge en Android) -->
+      <button class="boton instalar" id="instalar" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>Instalar app</button>
       <details class="desplegable">
         <summary class="boton"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Suscribirme al calendario</summary>
         <div class="menu" role="menu">
@@ -269,6 +314,31 @@
   </section>
 
   <section class="destacado" id="destacado" hidden></section>
+
+  <!-- Avisos push. Solo se muestra si el navegador los admite (en iPhone, solo con la app instalada) -->
+  <section class="tile avisos" id="avisos" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" style="width:36px;height:36px;fill:none;stroke:var(--rojo);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/></svg>
+    <h3>Avisos en el móvil</h3>
+    <!-- Estado 1: se puede activar -->
+    <div id="push-activar" hidden>
+      <p>Te avisamos el día antes de cada evento, con la hora.</p>
+      <div class="acciones"><button class="boton" id="btn-activar" type="button" style="border:0;font:inherit;font-size:15px;cursor:pointer;padding:10px 20px">Activar avisos</button></div>
+    </div>
+    <!-- Estado 2: ya activados -->
+    <div id="push-activos" class="push-estado" hidden>
+      <span class="push-ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Avisos activados</span>
+      <button class="enlace-boton" id="btn-baja" type="button">Desactivar</button>
+    </div>
+    <!-- Estado 3: iPhone sin instalar (Apple solo permite avisos desde la pantalla de inicio) -->
+    <p id="push-ios" class="aviso-push" hidden>Para recibir avisos en iPhone, primero añade esta web a la pantalla de inicio
+      (botón <strong>Compartir</strong> → <strong>Añadir a pantalla de inicio</strong>) y ábrela desde su icono.</p>
+    <!-- Estado 4: el usuario los bloqueó en el navegador -->
+    <p id="push-bloqueados" class="aviso-push" hidden>Has bloqueado los avisos para esta web. Para activarlos, permite las
+      notificaciones en los ajustes del navegador (o del móvil) y vuelve a esta página.</p>
+    <p class="push-error" id="push-error" role="alert" hidden></p>
+    <p class="privacidad">Solo guardamos la dirección técnica que tu navegador crea para enviarte los avisos. Sin nombre,
+      email ni teléfono. Puedes darte de baja cuando quieras. <a href="privacidad.html">Política de privacidad</a></p>
+  </section>
 
   <section id="eventos">
     <div class="cabecera-lista">
@@ -312,7 +382,19 @@
     </div>
   </section>
 
+  <p class="pie"><a href="privacidad.html">Política de privacidad</a></p>
 </main>
+
+<!-- Banner de iPhone: explica cómo instalar la web. No aparece si ya está instalada o si se cerró. -->
+<div class="banner-ios" id="banner-ios" role="dialog" aria-label="Instalar la app" hidden>
+  <img src="apple-touch-icon.png" alt="">
+  <div>
+    <b>Instala la app</b>
+    <p>Pulsa <svg class="compartir" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1"/></svg>
+      <strong>Compartir</strong> y luego <strong>Añadir a pantalla de inicio</strong>. Así podrás recibir avisos.</p>
+  </div>
+  <button type="button" id="cerrar-banner" aria-label="Cerrar">×</button>
+</div>
 
 <script>
   const NOMBRE_TIPO = { partido: "Partido", concierto: "Concierto", otro: "Otro" };
@@ -524,16 +606,142 @@
   });
 
   // Tarjeta de Telegram: solo aparece si se ha configurado el canal (config.json lo crea el robot)
+  // config.json también trae la dirección del servidor de avisos y la clave pública VAPID.
   fetch("config.json")
     .then(r => r.ok ? r.json() : {})
+    .catch(() => ({}))
     .then(cfg => {
       const canal = (cfg.telegram || "").trim().replace(/^@/, "");
       if (/^[A-Za-z0-9_]{5,}$/.test(canal)) {
         document.querySelectorAll(".lnk-telegram").forEach(a => a.href = "https://t.me/" + canal);
         document.querySelectorAll(".solo-telegram").forEach(el => el.hidden = false);
       }
-    })
-    .catch(() => {});
+      prepararAvisos(cfg);
+    });
+
+  /* ------------------------------------------------------------------
+     App instalable (PWA)
+     ------------------------------------------------------------------ */
+  const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);  // iPad con iPadOS
+  const instalada = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+
+  // El service worker permite abrir la web sin conexión y recibir avisos
+  const registroSW = "serviceWorker" in navigator
+    ? navigator.serviceWorker.register("sw.js").catch(err => { console.warn("Service worker:", err); return null; })
+    : Promise.resolve(null);
+
+  // Android (Chrome/Edge): el navegador avisa de que se puede instalar y guardamos ese aviso
+  // para lanzarlo cuando se pulse nuestro botón.
+  let peticionInstalar = null;
+  const botonInstalar = document.getElementById("instalar");
+  window.addEventListener("beforeinstallprompt", ev => {
+    ev.preventDefault();
+    peticionInstalar = ev;
+    botonInstalar.hidden = false;
+  });
+  botonInstalar.addEventListener("click", async () => {
+    if (!peticionInstalar) return;
+    peticionInstalar.prompt();
+    await peticionInstalar.userChoice;
+    peticionInstalar = null;      // solo se puede usar una vez
+    botonInstalar.hidden = true;
+  });
+  window.addEventListener("appinstalled", () => { botonInstalar.hidden = true; peticionInstalar = null; });
+
+  // iPhone/iPad: Safari no tiene botón de instalar, así que explicamos cómo hacerlo.
+  // No sale si ya está instalada o si se cerró antes.
+  const leer = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+  const banner = document.getElementById("banner-ios");
+  if (esIOS && !instalada() && !leer("banner-ios-cerrado")) banner.hidden = false;
+  document.getElementById("cerrar-banner").addEventListener("click", () => {
+    banner.hidden = true;
+    guardar("banner-ios-cerrado", "1");
+  });
+
+  /* ------------------------------------------------------------------
+     Avisos push
+     ------------------------------------------------------------------ */
+  function claveABytes(b64) {
+    const s = (b64 + "=".repeat((4 - b64.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/");
+    return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  }
+
+  async function prepararAvisos(cfg) {
+    const caja = document.getElementById("avisos");
+    const api = (cfg.push_api || "").replace(/\/$/, "");
+    if (!api || !cfg.vapid) return;   // avisos sin configurar: no se enseña nada
+
+    const ver = (id) => ["push-activar", "push-activos", "push-ios", "push-bloqueados"]
+      .forEach(x => document.getElementById(x).hidden = x !== id);
+    const error = document.getElementById("push-error");
+    const mostrarError = (texto) => { error.textContent = texto; error.hidden = !texto; };
+
+    const admite = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+    // En iPhone los avisos solo funcionan con la web abierta desde el icono de la pantalla de inicio
+    if (esIOS && !instalada()) { ver("push-ios"); caja.hidden = false; return; }
+    if (!admite) return;               // navegador sin avisos: no se enseña la tarjeta
+
+    const reg = await registroSW;
+    if (!reg) return;
+    const llamar = (ruta, datos) => fetch(api + ruta, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos),
+    }).then(r => { if (!r.ok) throw new Error("El servidor respondió " + r.status); });
+
+    async function actualizar() {
+      if (Notification.permission === "denied") return ver("push-bloqueados");
+      const sub = await (await navigator.serviceWorker.ready).pushManager.getSubscription();
+      ver(sub && Notification.permission === "granted" ? "push-activos" : "push-activar");
+    }
+
+    // El permiso se pide solo aquí, al pulsar el botón (nunca al cargar la página)
+    document.getElementById("btn-activar").addEventListener("click", async (ev) => {
+      const boton = ev.currentTarget;
+      boton.disabled = true;
+      mostrarError("");
+      try {
+        const permiso = await Notification.requestPermission();
+        if (permiso !== "granted") return await actualizar();
+        const listo = await navigator.serviceWorker.ready;
+        const sub = await listo.pushManager.subscribe({
+          userVisibleOnly: true, applicationServerKey: claveABytes(cfg.vapid) });
+        await llamar("/suscribir", sub.toJSON());
+        await actualizar();
+      } catch (e) {
+        console.error(e);
+        mostrarError("No se han podido activar los avisos. Comprueba la conexión e inténtalo de nuevo.");
+      } finally {
+        boton.disabled = false;
+      }
+    });
+
+    document.getElementById("btn-baja").addEventListener("click", async (ev) => {
+      const boton = ev.currentTarget;
+      boton.disabled = true;
+      mostrarError("");
+      try {
+        const sub = await (await navigator.serviceWorker.ready).pushManager.getSubscription();
+        if (sub) {
+          await llamar("/baja", { endpoint: sub.endpoint });   // primero se borra del servidor
+          await sub.unsubscribe();                             // y luego del navegador
+        }
+        await actualizar();
+      } catch (e) {
+        console.error(e);
+        mostrarError("No se ha podido completar la baja. Comprueba la conexión e inténtalo de nuevo.");
+      } finally {
+        boton.disabled = false;
+      }
+    });
+
+    // Si el usuario cambia el permiso en los ajustes y vuelve, se actualiza la tarjeta
+    navigator.permissions?.query({ name: "notifications" })
+      .then(estado => { estado.onchange = () => actualizar(); }).catch(() => {});
+
+    await actualizar();
+    caja.hidden = false;
+  }
 
   fetch("eventos.json")
     .then(r => r.json())
