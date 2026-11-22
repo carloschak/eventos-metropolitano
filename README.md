@@ -148,6 +148,4 @@ borrarla después desde Telegram).
 
 La página usa [GoatCounter](https://www.goatcounter.com), gratuito y sin cookies (no hace falta banner de consentimiento).
 
-1. Crea una cuenta en goatcounter.com y elige un código (por ejemplo `eventos-metropolitano`).
-2. En `index.html`, cambia `TU-CODIGO` por ese código.
-3. Las visitas se ven en `https://TU-CODIGO.goatcounter.com`. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
+Las visitas se ven en https://eventos-metropolitano.goatcounter.com. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
