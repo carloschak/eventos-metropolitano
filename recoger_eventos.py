@@ -211,6 +211,92 @@ def combinar(listas):
     return list(resultado.values())
 
 
+# ---------------------------------------------------------------------------
+# Afluencia estimada y franja en la que la zona está complicada
+# (pensado para los vecinos: cuándo es mejor no mover el coche)
+# ---------------------------------------------------------------------------
+
+# No hay datos reales de asistencia: es una estimación con reglas sencillas.
+# Nivel 1 = afluencia normal de partido, 2 = mucha gente, 3 = lleno total.
+NIVELES = {1: "Afluencia normal", 2: "Mucha gente", 3: "Lleno total"}
+
+# Rivales que llenan el estadio (o casi). Se buscan en el título sin tildes.
+RIVALES_LLENO = ["real madrid", "barcelona", "barca"]
+RIVALES_MUCHA_GENTE = ["athletic", "sevilla", "betis", "valencia", "real sociedad", "villarreal"]
+
+# Rondas de eliminatoria (Champions, Europa League, Copa...)
+RONDAS_GRANDES = ["final", "semifinal", "semifinales", "cuartos"]
+RONDAS_ELIMINATORIA = ["octavos", "dieciseisavos", "playoff", "play off", "eliminatoria"]
+
+# Horas antes y después de la hora de inicio en las que la zona está complicada
+# (llegada de público, cortes, aparcamiento lleno y salida). Se puede ajustar.
+ANTES_HORAS = {"partido": 2.5, "concierto": 4, "otro": 2}
+DESPUES_HORAS = {"partido": 2.75, "concierto": 4, "otro": 2.5}
+ANTES_EXTRA_LLENO = 0.5  # si se espera lleno total, la gente llega antes
+
+
+def _contiene(texto, palabras):
+    return any(re.search(r"\b" + re.escape(p) + r"\b", texto) for p in palabras)
+
+
+def estimar_afluencia(ev):
+    """Devuelve (nivel, motivo) a partir del tipo de evento y su título."""
+    t = normalizar(ev["titulo"])
+    if ev["tipo"] == "concierto":
+        return 3, "Concierto: estadio lleno y colas desde la tarde"
+    if _contiene(t, RIVALES_LLENO):
+        return 3, "Partido grande contra un rival de máxima rivalidad"
+    if _contiene(t, RONDAS_ELIMINATORIA):  # va antes que "final" por "octavos de final"
+        return 2, "Eliminatoria europea o de Copa"
+    if _contiene(t, RONDAS_GRANDES):
+        return 3, "Final" if re.search(r"(?<!de )\bfinal\b", t) and "semifinal" not in t else "Eliminatoria en ronda decisiva"
+    if "champions" in t:
+        return 2, "Partido de Champions League"
+    if _contiene(t, RIVALES_MUCHA_GENTE):
+        return 2, "Rival con mucha afición"
+    if "copa" in t:
+        return 1, "Copa en ronda temprana"
+    if ev["tipo"] == "partido":
+        return 1, "Partido de liga habitual"
+    return 1, "Evento"
+
+
+def _sumar_horas(hora, horas):
+    h, m = map(int, hora.split(":"))
+    total = (h * 60 + m + round(horas * 60)) % (24 * 60)
+    return f"{total // 60:02d}:{total % 60:02d}"
+
+
+def zona_complicada(ev, nivel):
+    """Franja aproximada en la que la zona está complicada, o None si no hay hora."""
+    if not ev.get("hora"):
+        return None
+    antes = ANTES_HORAS.get(ev["tipo"], 2) + (ANTES_EXTRA_LLENO if nivel == 3 and ev["tipo"] == "partido" else 0)
+    despues = DESPUES_HORAS.get(ev["tipo"], 2.5)
+    return {"desde": _sumar_horas(ev["hora"], -antes), "hasta": _sumar_horas(ev["hora"], despues)}
+
+
+def completar_estimaciones(ev):
+    """Añade (o recalcula) los campos 'afluencia' y 'zona_complicada' del evento."""
+    nivel, motivo = estimar_afluencia(ev)
+    ev["afluencia"] = {"nivel": nivel, "texto": NIVELES[nivel], "motivo": motivo}
+    ev["zona_complicada"] = zona_complicada(ev, nivel)
+    return ev
+
+
+def resumen_vecinos(ev):
+    """Texto corto con la afluencia y la franja, para el calendario y los avisos."""
+    if "afluencia" not in ev:
+        completar_estimaciones(ev)
+    texto = f"Afluencia estimada: {ev['afluencia']['texto']} ({ev['afluencia']['motivo']})."
+    z = ev.get("zona_complicada")
+    if z:
+        texto += f" Zona complicada aprox. de {z['desde']} a {z['hasta']}."
+    else:
+        texto += " Franja complicada: cuando se confirme la hora."
+    return texto
+
+
 def detectar_cambios(recientes, anteriores, hoy):
     """Compara lo recogido hoy con lo guardado antes y devuelve las novedades:
     eventos nuevos y horas que se han confirmado o cambiado."""
@@ -319,6 +405,7 @@ def generar_ics(eventos, hoy):
             fin = date.fromisoformat(ev.get("fecha_fin") or ev["fecha"]) + timedelta(days=1)
             lineas += [f"DTSTART;VALUE=DATE:{inicio:%Y%m%d}", f"DTEND;VALUE=DATE:{fin:%Y%m%d}"]
         nota = f"Hora: {ev['hora']} h" if ev.get("hora") else "Hora por confirmar"
+        nota += "\n" + resumen_vecinos(ev)
         lineas += [
             f"SUMMARY:{_escapar(ev['titulo'])}",
             f"LOCATION:{_escapar(ev.get('lugar') or 'Estadio Riyadh Air Metropolitano')}",
@@ -352,6 +439,10 @@ def main():
     # Solo eventos que no han terminado
     eventos = [e for e in eventos if (e.get("fecha_fin") or e["fecha"]) >= hoy]
     eventos.sort(key=lambda e: (e["fecha"], e["hora"] or "99:99"))
+
+    # Afluencia estimada y franja complicada (se recalculan siempre, por si cambian las reglas)
+    for ev in eventos + [c["evento"] for c in cambios]:
+        completar_estimaciones(ev)
 
     salida = {"actualizado": hoy, "eventos": eventos}
     ARCHIVO_SALIDA.write_text(json.dumps(salida, ensure_ascii=False, indent=2), encoding="utf-8")

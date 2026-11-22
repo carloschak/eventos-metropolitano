@@ -9,7 +9,16 @@
       "titulo": "Atlético de Madrid - Viking FK (UEFA Champions League. Fase Liga. Jornada 5)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-viking-fk-uefa-champions-league-fase-liga-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Partido de Champions League"
+      },
+      "zona_complicada": {
+        "desde": "18:30",
+        "hasta": "23:45"
+      }
     },
     {
       "fecha": "2026-12-06",
@@ -19,7 +28,13 @@
       "titulo": "Atlético de Madrid - Real Betis (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-real-betis-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Rival con mucha afición"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2026-12-13",
@@ -29,7 +44,13 @@
       "titulo": "Atlético de Madrid - Valencia CF (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-valencia-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Rival con mucha afición"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-01-10",
@@ -39,7 +60,13 @@
       "titulo": "Atlético de Madrid - R. Racing Club (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-r-racing-club-laliga-ea-sports-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-01-17",
@@ -49,7 +76,13 @@
       "titulo": "Atlético de Madrid - Real Sociedad (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-real-sociedad-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Rival con mucha afición"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-01-27",
@@ -59,7 +92,16 @@
       "titulo": "Atlético de Madrid - Fenerbahçe SK (UEFA Champions League. Fase Liga. Jornada 8)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-fenerbahce-sk-uefa-champions-league-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Partido de Champions League"
+      },
+      "zona_complicada": {
+        "desde": "18:30",
+        "hasta": "23:45"
+      }
     },
     {
       "fecha": "2027-01-31",
@@ -69,7 +111,13 @@
       "titulo": "Atlético de Madrid - RCD Espanyol (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-rcd-espanyol-laliga-ea-sports-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-02-21",
@@ -79,7 +127,13 @@
       "titulo": "Atlético de Madrid - Elche CF (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-elche-cf-laliga-ea-sports-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-03-07",
@@ -89,7 +143,13 @@
       "titulo": "Atlético de Madrid - RC Celta de Vigo (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-rc-celta-vigo-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-04-11",
@@ -99,7 +159,13 @@
       "titulo": "Atlético de Madrid - Levante UD (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-levante-ud-laliga-ea-sports-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-04-18",
@@ -109,7 +175,13 @@
       "titulo": "Atlético de Madrid - Sevilla FC (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-sevilla-fc-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Rival con mucha afición"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-05-02",
@@ -119,7 +191,13 @@
       "titulo": "Atlético de Madrid - Deportivo Alavés (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-deportivo-alaves-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-05-16",
@@ -129,7 +207,13 @@
       "titulo": "Atlético de Madrid - Rayo Vallecano (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-rayo-vallecano-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 1,
+        "texto": "Afluencia normal",
+        "motivo": "Partido de liga habitual"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-05-23",
@@ -139,7 +223,13 @@
       "titulo": "Atlético de Madrid - Athletic Club Bilbao (LALIGA EA SPORTS)",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/atletico-madrid-athletic-club-bilbao-laliga-ea-sports-estadio-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 2,
+        "texto": "Mucha gente",
+        "motivo": "Rival con mucha afición"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-06-05",
@@ -149,7 +239,13 @@
       "titulo": "Final UEFA Champions League 2027",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/final-uefa-champions-league-2027-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 3,
+        "texto": "Lleno total",
+        "motivo": "Final"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-06-24",
@@ -159,7 +255,16 @@
       "titulo": "Karol G",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/karol-g-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 3,
+        "texto": "Lleno total",
+        "motivo": "Concierto: estadio lleno y colas desde la tarde"
+      },
+      "zona_complicada": {
+        "desde": "16:00",
+        "hasta": "00:00"
+      }
     },
     {
       "fecha": "2027-07-09",
@@ -169,7 +274,13 @@
       "titulo": "Estopa",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/estopa-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 3,
+        "texto": "Lleno total",
+        "motivo": "Concierto: estadio lleno y colas desde la tarde"
+      },
+      "zona_complicada": null
     },
     {
       "fecha": "2027-07-30",
@@ -179,7 +290,16 @@
       "titulo": "Harry Styles",
       "lugar": "Estadio Riyadh Air Metropolitano",
       "url": "https://www.esmadrid.com/agenda/harry-styles-estadio-riyadh-air-metropolitano",
-      "fuente": "esmadrid.com"
+      "fuente": "esmadrid.com",
+      "afluencia": {
+        "nivel": 3,
+        "texto": "Lleno total",
+        "motivo": "Concierto: estadio lleno y colas desde la tarde"
+      },
+      "zona_complicada": {
+        "desde": "16:45",
+        "hasta": "00:45"
+      }
     }
   ]
 }

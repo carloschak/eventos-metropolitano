@@ -24,6 +24,8 @@
       --acento-hover: #0077ed;
       --rojo: #e30613;
       --morado: #7d3cff;
+      --verde: #1f8a3b;          /* afluencia normal */
+      --naranja: #c25e00;        /* mucha gente */
       --segmento: rgba(118, 118, 128, .12);
       --barra: rgba(245, 245, 247, .72);
       --sombra: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
@@ -36,7 +38,7 @@
       :root {
         --fondo: #000000; --superficie: #1c1c1e; --texto: #f5f5f7; --secundario: #a1a1a6;
         --linea: rgba(255, 255, 255, .1); --acento: #2997ff; --acento-hover: #47a6ff;
-        --rojo: #ff453a; --morado: #bf8cff; --segmento: rgba(118, 118, 128, .24);
+        --rojo: #ff453a; --morado: #bf8cff; --verde: #30d158; --naranja: #ff9f0a; --segmento: rgba(118, 118, 128, .24);
         --barra: rgba(22, 22, 23, .72);
         --sombra: none; --sombra-hover: none;
         --destacado-fondo: #1c1c1e; --destacado-texto: #f5f5f7;
@@ -187,6 +189,23 @@
     .info .acciones { margin-top: 12px; }
     .info .boton-sec { font-size: 13px; padding: 5px 12px; }
 
+    /* Afluencia estimada y franja complicada (para los vecinos) */
+    .vecinos { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 10px 0 0; font-size: 14px; }
+    .afluencia { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+    .afluencia::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; flex: none; }
+    .afluencia.n1 { color: var(--verde); }
+    .afluencia.n2 { color: var(--naranja); }
+    .afluencia.n3 { color: var(--rojo); }
+    .franja-zona { color: var(--secundario); }
+    .franja-zona b { color: var(--texto); font-weight: 600; }
+    .destacado .vecinos { font-size: 16px; margin-top: 14px; }
+    .destacado .franja-zona { color: #a1a1a6; }
+    .destacado .franja-zona b { color: #f5f5f7; }
+    .destacado .afluencia.n1 { color: #30d158; }
+    .destacado .afluencia.n2 { color: #ff9f0a; }
+    .destacado .afluencia.n3 { color: #ff6961; }
+    .nota-estimacion { color: var(--secundario); font-size: 14px; margin: 10px 0 0; max-width: 62ch; }
+
     .etiqueta { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 980px; white-space: nowrap; align-self: start; }
     .etiqueta.partido { color: var(--rojo); background: color-mix(in srgb, var(--rojo) 10%, transparent); }
     .etiqueta.concierto { color: var(--morado); background: color-mix(in srgb, var(--morado) 12%, transparent); }
@@ -278,6 +297,7 @@
         <button data-tipo="concierto" aria-pressed="false">Conciertos</button>
       </div>
     </div>
+    <p class="nota-estimacion">La afluencia y la <b>zona complicada</b> (cuándo cuesta aparcar o circular por el barrio) son una estimación según el rival, la competición y el tipo de evento.</p>
     <div id="lista"></div>
   </section>
 
@@ -421,6 +441,30 @@
     return t.charAt(0).toUpperCase() + t.slice(1);
   };
 
+  // Afluencia estimada y franja en la que la zona está complicada (las calcula recoger_eventos.py)
+  function pintarVecinos(e, contenedor) {
+    const af = e.afluencia;
+    if (!af) return;
+    const caja = document.createElement("p");
+    caja.className = "vecinos";
+    const nivel = document.createElement("span");
+    nivel.className = "afluencia n" + af.nivel;
+    nivel.textContent = af.texto;
+    nivel.title = af.motivo;
+    const zona = document.createElement("span");
+    zona.className = "franja-zona";
+    if (e.zona_complicada) {
+      zona.append("Zona complicada ");
+      const b = document.createElement("b");
+      b.textContent = e.zona_complicada.desde + "–" + e.zona_complicada.hasta;
+      zona.append(b);
+    } else {
+      zona.textContent = "Zona complicada: cuando se confirme la hora";
+    }
+    caja.append(nivel, zona);
+    contenedor.append(caja);
+  }
+
   // Botones "Añadir a Google" / "Apple/Outlook" para un evento
   function botonesCalendario(e, contenedor, corto = false) {
     const g = document.createElement("a");
@@ -453,6 +497,8 @@
     caja.querySelector(".comp").textContent = comp || NOMBRE_TIPO[e.tipo];
     caja.querySelector(".cuando").textContent = fechaLarga(e) + " · " + (e.hora ? e.hora + "\u00a0h" : "hora por confirmar");
     const acciones = caja.querySelector(".acciones");
+    pintarVecinos(e, caja.querySelector(".cuando").parentNode);
+    caja.querySelector(".vecinos")?.after(acciones);
     botonesCalendario(e, acciones);
     caja.hidden = false;
   }
@@ -501,6 +547,8 @@
       hora.textContent = e.hora ? e.hora + "\u00a0h" : "hora por confirmar";
       if (!e.hora) hora.className = "pendiente";
       cuando.append(hora);
+      pintarVecinos(e, tarjeta.querySelector(".info"));
+      tarjeta.querySelector(".info").append(tarjeta.querySelector(".info .acciones"));
       botonesCalendario(e, tarjeta.querySelector(".acciones"), true);
       lista.appendChild(tarjeta);
     });

@@ -149,3 +149,11 @@ borrarla después desde Telegram).
 La página usa [GoatCounter](https://www.goatcounter.com), gratuito y sin cookies (no hace falta banner de consentimiento).
 
 Las visitas se ven en https://eventos-metropolitano.goatcounter.com. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
+
+## Afluencia y zona complicada
+
+Cada evento lleva una **afluencia estimada** (🟢 normal, 🟠 mucha gente, 🔴 lleno total) y la
+**franja en la que la zona está complicada** para aparcar o circular. Es una estimación con reglas
+sencillas (rival, competición, ronda, concierto), no un dato oficial. Las reglas y las horas antes y
+después están al principio de la sección «Afluencia estimada» de `recoger_eventos.py`, por si
+quieres ajustarlas (por ejemplo, añadir un rival a `RIVALES_LLENO`).

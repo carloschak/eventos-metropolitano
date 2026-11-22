@@ -31,7 +31,8 @@ DTEND;TZID=Europe/Madrid:20261125T230000
 SUMMARY:Atlético de Madrid - Viking FK (UEFA Champions League. Fase Liga.
   Jornada 5)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora: 21:00 h
+DESCRIPTION:Hora: 21:00 h\nAfluencia estimada: Mucha gente (Partido de Cha
+ mpions League). Zona complicada aprox. de 18:30 a 23:45.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -53,7 +54,8 @@ DTSTART;VALUE=DATE:20261206
 DTEND;VALUE=DATE:20261207
 SUMMARY:Atlético de Madrid - Real Betis (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Mucha gente (Rival con
+  mucha afición). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -75,7 +77,8 @@ DTSTART;VALUE=DATE:20261213
 DTEND;VALUE=DATE:20261214
 SUMMARY:Atlético de Madrid - Valencia CF (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Mucha gente (Rival con
+  mucha afición). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -97,7 +100,8 @@ DTSTART;VALUE=DATE:20270110
 DTEND;VALUE=DATE:20270111
 SUMMARY:Atlético de Madrid - R. Racing Club (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -119,7 +123,8 @@ DTSTART;VALUE=DATE:20270117
 DTEND;VALUE=DATE:20270118
 SUMMARY:Atlético de Madrid - Real Sociedad (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Mucha gente (Rival con
+  mucha afición). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -142,7 +147,8 @@ DTEND;TZID=Europe/Madrid:20270127T230000
 SUMMARY:Atlético de Madrid - Fenerbahçe SK (UEFA Champions League. Fase 
  Liga. Jornada 8)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora: 21:00 h
+DESCRIPTION:Hora: 21:00 h\nAfluencia estimada: Mucha gente (Partido de Cha
+ mpions League). Zona complicada aprox. de 18:30 a 23:45.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -164,7 +170,8 @@ DTSTART;VALUE=DATE:20270131
 DTEND;VALUE=DATE:20270201
 SUMMARY:Atlético de Madrid - RCD Espanyol (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -186,7 +193,8 @@ DTSTART;VALUE=DATE:20270221
 DTEND;VALUE=DATE:20270222
 SUMMARY:Atlético de Madrid - Elche CF (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -208,7 +216,8 @@ DTSTART;VALUE=DATE:20270307
 DTEND;VALUE=DATE:20270308
 SUMMARY:Atlético de Madrid - RC Celta de Vigo (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -230,7 +239,8 @@ DTSTART;VALUE=DATE:20270411
 DTEND;VALUE=DATE:20270412
 SUMMARY:Atlético de Madrid - Levante UD (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -252,7 +262,8 @@ DTSTART;VALUE=DATE:20270418
 DTEND;VALUE=DATE:20270419
 SUMMARY:Atlético de Madrid - Sevilla FC (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Mucha gente (Rival con
+  mucha afición). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -274,7 +285,8 @@ DTSTART;VALUE=DATE:20270502
 DTEND;VALUE=DATE:20270503
 SUMMARY:Atlético de Madrid - Deportivo Alavés (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -296,7 +308,8 @@ DTSTART;VALUE=DATE:20270516
 DTEND;VALUE=DATE:20270517
 SUMMARY:Atlético de Madrid - Rayo Vallecano (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Afluencia normal (Part
+ ido de liga habitual). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -318,7 +331,8 @@ DTSTART;VALUE=DATE:20270523
 DTEND;VALUE=DATE:20270524
 SUMMARY:Atlético de Madrid - Athletic Club Bilbao (LALIGA EA SPORTS)
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Mucha gente (Rival con
+  mucha afición). Franja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -340,7 +354,8 @@ DTSTART;VALUE=DATE:20270605
 DTEND;VALUE=DATE:20270606
 SUMMARY:Final UEFA Champions League 2027
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Lleno total (Final). F
+ ranja complicada: cuando se confirme la hora.
 CATEGORIES:Partido
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -360,7 +375,9 @@ DTSTART;VALUE=DATE:20270624
 DTEND;VALUE=DATE:20270628
 SUMMARY:Karol G
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora: 20:00 h
+DESCRIPTION:Hora: 20:00 h\nAfluencia estimada: Lleno total (Concierto: est
+ adio lleno y colas desde la tarde). Zona complicada aprox. de 16:00 a 00:0
+ 0.
 CATEGORIES:Concierto
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -380,7 +397,9 @@ DTSTART;VALUE=DATE:20270709
 DTEND;VALUE=DATE:20270710
 SUMMARY:Estopa
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora por confirmar
+DESCRIPTION:Hora por confirmar\nAfluencia estimada: Lleno total (Concierto
+ : estadio lleno y colas desde la tarde). Franja complicada: cuando se conf
+ irme la hora.
 CATEGORIES:Concierto
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -400,7 +419,9 @@ DTSTART;VALUE=DATE:20270730
 DTEND;VALUE=DATE:20270803
 SUMMARY:Harry Styles
 LOCATION:Estadio Riyadh Air Metropolitano
-DESCRIPTION:Hora: 20:45 h
+DESCRIPTION:Hora: 20:45 h\nAfluencia estimada: Lleno total (Concierto: est
+ adio lleno y colas desde la tarde). Zona complicada aprox. de 16:45 a 00:4
+ 5.
 CATEGORIES:Concierto
 BEGIN:VALARM
 ACTION:DISPLAY
