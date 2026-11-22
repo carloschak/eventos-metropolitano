@@ -143,3 +143,11 @@ Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
 **"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.
 Ojo: si Telegram está configurado, la prueba también se publica en el canal (puedes
 borrarla después desde Telegram).
+
+## Contador de visitas
+
+La página usa [GoatCounter](https://www.goatcounter.com), gratuito y sin cookies (no hace falta banner de consentimiento).
+
+1. Crea una cuenta en goatcounter.com y elige un código (por ejemplo `eventos-metropolitano`).
+2. En `index.html`, cambia `TU-CODIGO` por ese código.
+3. Las visitas se ven en `https://TU-CODIGO.goatcounter.com`. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
