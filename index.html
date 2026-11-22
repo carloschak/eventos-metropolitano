@@ -181,7 +181,6 @@
 
     .info { min-width: 0; }
     .info h4 { font-size: 19px; line-height: 1.25; letter-spacing: -.015em; margin: 0; font-weight: 600; overflow-wrap: anywhere; }
-    .info h4 a { color: var(--texto); }
     .info .comp { color: var(--secundario); font-size: 14px; margin: 2px 0 0; }
     .info .cuando { font-size: 15px; margin: 8px 0 0; }
     .info .cuando .pendiente { color: var(--secundario); }
@@ -367,7 +366,7 @@
     const f = franja(e);
     const p = new URLSearchParams({
       action: "TEMPLATE", text: e.titulo, dates: f.ini + "/" + f.fin, ctz: "Europe/Madrid",
-      location: LUGAR, details: (e.hora ? "" : "Hora por confirmar\n") + e.url,
+      location: LUGAR, details: e.hora ? "" : "Hora por confirmar",
     });
     return "https://calendar.google.com/calendar/render?" + p;
   }
@@ -399,7 +398,7 @@
     const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//eventos-metropolitano//ES",
       "BEGIN:VEVENT", "UID:" + f.ini + "-" + Math.random().toString(36).slice(2) + "@eventos-metropolitano",
       "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z",
-      ...fechas, "SUMMARY:" + esc(e.titulo), "LOCATION:" + esc(LUGAR), "URL:" + e.url,
+      ...fechas, "SUMMARY:" + esc(e.titulo), "LOCATION:" + esc(LUGAR),
       ...alarmasIcs(e, f.conHora), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
@@ -455,10 +454,6 @@
     caja.querySelector(".comp").textContent = comp || NOMBRE_TIPO[e.tipo];
     caja.querySelector(".cuando").textContent = fechaLarga(e) + " · " + (e.hora ? e.hora + "\u00a0h" : "hora por confirmar");
     const acciones = caja.querySelector(".acciones");
-    const info = document.createElement("a");
-    info.className = "boton"; info.href = e.url; info.target = "_blank"; info.rel = "noopener";
-    info.textContent = "Más información";
-    acciones.append(info);
     botonesCalendario(e, acciones);
     caja.hidden = false;
   }
@@ -491,16 +486,14 @@
           <div class="s">${f.toLocaleDateString("es-ES", { weekday: "short" }).replace(".", "")}</div>
         </div>
         <div class="info">
-          <h4><a target="_blank" rel="noopener"></a></h4>
+          <h4></h4>
           <p class="comp"></p>
           <p class="cuando"></p>
           <div class="acciones"></div>
         </div>
         <span class="etiqueta ${e.tipo}">${NOMBRE_TIPO[e.tipo] || e.tipo}</span>`;
       // textContent evita que un título raro rompa la página
-      const enlace = tarjeta.querySelector("h4 a");
-      enlace.textContent = principal;
-      enlace.href = e.url;
+      tarjeta.querySelector("h4").textContent = principal;
       const pComp = tarjeta.querySelector(".comp");
       if (comp) pComp.textContent = comp; else pComp.remove();
       const cuando = tarjeta.querySelector(".cuando");

@@ -324,8 +324,7 @@ def generar_ics(eventos, hoy):
         lineas += [
             f"SUMMARY:{_escapar(ev['titulo'])}",
             f"LOCATION:{_escapar(ev.get('lugar') or 'Estadio Riyadh Air Metropolitano')}",
-            f"DESCRIPTION:{_escapar(nota + chr(10) + ev['url'])}",
-            f"URL:{ev['url']}",
+            f"DESCRIPTION:{_escapar(nota)}",
             f"CATEGORIES:{ev['tipo'].capitalize()}",
             *alarmas(ev, con_hora),
             "END:VEVENT",
