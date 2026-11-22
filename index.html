@@ -204,7 +204,6 @@
     .tile h3 { font-size: 24px; letter-spacing: -.02em; margin: 0 0 8px; font-weight: 600; }
     .tile p { color: var(--secundario); margin: 0 0 22px; font-size: 16px; }
 
-    footer { color: var(--secundario); font-size: 12px; padding: 48px 0 40px; border-top: 1px solid var(--linea); margin-top: 72px; line-height: 1.6; }
 
     /* Móvil */
     @media (max-width: 640px) {
@@ -311,10 +310,6 @@
     </div>
   </section>
 
-  <footer id="pie">
-    Datos de la agenda de esmadrid.com, actualizados automáticamente cada día. Web no oficial, sin relación con el
-    Club Atlético de Madrid ni con el estadio. Comprueba siempre la información en la web oficial de cada evento.
-  </footer>
 </main>
 
 <script>
@@ -543,11 +538,10 @@
     .then(datos => {
       eventos = datos.eventos.sort((a, b) =>
         (a.fecha + (a.hora || "99:99")).localeCompare(b.fecha + (b.hora || "99:99")));
-      const act = aFecha(datos.actualizado).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
       const partidos = eventos.filter(e => e.tipo === "partido").length;
       const conciertos = eventos.filter(e => e.tipo === "concierto").length;
       document.getElementById("estado").textContent =
-        `${partidos} partidos · ${conciertos} conciertos · actualizado el ${act}`;
+        `${partidos} partidos · ${conciertos} conciertos`;
       pintarDestacado();
       pintar();
     })
