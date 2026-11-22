@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Eventos estadio Metropolitano Madrid</title>
-  <meta name="description" content="Próximos partidos y conciertos en el estadio Riyadh Air Metropolitano de Madrid.">
+  <title>Eventos Metropolitano Madrid</title>
+  <meta name="description" content="Próximos partidos y conciertos en el estadio Riyadh Air Metropolitano de Madrid, con la afluencia estimada y la franja horaria complicada para el barrio.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,223 +23,136 @@
       --acento: #0071e3;         /* azul de enlaces y botones */
       --acento-hover: #0077ed;
       --rojo: #e30613;
-      --morado: #7d3cff;
       --verde: #1f8a3b;          /* afluencia normal */
       --naranja: #c25e00;        /* mucha gente */
       --segmento: rgba(118, 118, 128, .12);
-      --barra: rgba(245, 245, 247, .72);
-      --sombra: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
-      --sombra-hover: 0 2px 4px rgba(0,0,0,.05), 0 12px 32px rgba(0,0,0,.08);
-      --destacado-fondo: #1d1d1f;
-      --destacado-texto: #f5f5f7;
-      --radio: 18px;
+      --barra: rgba(255, 255, 255, .85);
+      --radio: 16px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --fondo: #000000; --superficie: #1c1c1e; --texto: #f5f5f7; --secundario: #a1a1a6;
         --linea: rgba(255, 255, 255, .1); --acento: #2997ff; --acento-hover: #47a6ff;
-        --rojo: #ff453a; --morado: #bf8cff; --verde: #30d158; --naranja: #ff9f0a; --segmento: rgba(118, 118, 128, .24);
-        --barra: rgba(22, 22, 23, .72);
-        --sombra: none; --sombra-hover: none;
-        --destacado-fondo: #1c1c1e; --destacado-texto: #f5f5f7;
+        --rojo: #ff453a; --verde: #30d158; --naranja: #ff9f0a;
+        --segmento: rgba(118, 118, 128, .24); --barra: rgba(22, 22, 23, .8);
       }
     }
 
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }  /* lo oculto siempre queda oculto */
-    html { scroll-behavior: smooth; }
-    section[id] { scroll-margin-top: 64px; }  /* que la barra fija no tape los títulos */
     body {
       margin: 0; background: var(--fondo); color: var(--texto);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", Roboto, sans-serif;
-      font-size: 17px; line-height: 1.47; letter-spacing: -.01em;
-      -webkit-font-smoothing: antialiased;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased;
     }
     a { color: var(--acento); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .contenedor { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+    .contenedor { max-width: 720px; margin: 0 auto; padding: 0 16px; }
 
-    /* Barra superior fija y translúcida */
+    /* Barra superior fija con el nombre y los iconos de Telegram y calendario */
     .barra {
-      position: sticky; top: 0; z-index: 10;
-      background: var(--barra);
+      position: sticky; top: 0; z-index: 10; background: var(--barra);
       backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--linea);
     }
-    .barra .contenedor { display: flex; align-items: center; justify-content: space-between; height: 52px; }
-    .marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; color: var(--texto); }
-    .marca:hover { text-decoration: none; }
-    .marca img { width: 26px; height: 26px; }
-    .barra nav > a:not(.icono) { font-size: 13px; color: var(--texto); opacity: .8; margin-right: 10px; }
-    .barra nav > a:not(.icono):hover { opacity: 1; text-decoration: none; }
-    .barra nav { display: flex; align-items: center; gap: 4px; }
-
-    /* Iconos minimalistas de la barra (calendario y Telegram) */
+    .barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 56px; }
+    .marca { display: flex; align-items: center; gap: 9px; min-width: 0; color: var(--texto); }
+    .marca img { width: 26px; height: 26px; flex: none; }
+    .marca h1 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .barra nav { display: flex; gap: 6px; flex: none; }
     .icono {
       width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
-      color: var(--texto); cursor: pointer; transition: background .2s;
+      background: var(--segmento); color: var(--texto); cursor: pointer; transition: opacity .2s;
     }
-    .icono:hover { background: var(--segmento); text-decoration: none; }
-    .icono svg, .boton svg, .boton-sec svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-    .boton svg, .boton-sec svg { width: 18px; height: 18px; }
+    .icono:hover { opacity: .75; }
+    .icono svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
     /* Menú desplegable (usa <details>, sin librerías) */
     details.desplegable { position: relative; }
     details.desplegable summary { list-style: none; }
     details.desplegable summary::-webkit-details-marker { display: none; }
     .menu {
-      position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; min-width: 230px; text-align: left;
+      position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; min-width: 220px;
       background: var(--superficie); border: 1px solid var(--linea); border-radius: 14px; padding: 6px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.16); animation: aparecer .18s ease both;
+      box-shadow: 0 12px 40px rgba(0,0,0,.16);
     }
     .menu small { display: block; color: var(--secundario); font-size: 12px; padding: 8px 12px 4px; }
     .menu a { display: block; padding: 10px 12px; border-radius: 10px; color: var(--texto); font-size: 14px; cursor: pointer; }
-    .menu a:hover { background: var(--segmento); text-decoration: none; }
-    .cta details.desplegable .menu { right: auto; left: 50%; transform: translateX(-50%); }
+    .menu a:hover { background: var(--segmento); }
 
-    /* Botones de suscripción de la portada */
-    .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
-    .cta .boton, .cta .boton-sec { font-size: 16px; padding: 11px 22px; gap: 8px; cursor: pointer; }
-    .cta summary.boton { user-select: none; }
-
-    /* Portada */
-    .portada { text-align: center; padding: 72px 0 40px; }
-    .portada h1 {
-      font-size: clamp(40px, 7vw, 64px); line-height: 1.06; letter-spacing: -.03em;
-      font-weight: 700; margin: 0 auto 14px; max-width: 20ch;
-    }
-    .portada .lema { font-size: clamp(19px, 2.6vw, 24px); color: var(--secundario); margin: 0 auto; max-width: 30ch; line-height: 1.3; }
-    .portada .estado { font-size: 14px; color: var(--secundario); margin-top: 18px; }
-
-    /* Próximo evento destacado */
-    .destacado {
-      background: var(--destacado-fondo); color: var(--destacado-texto);
-      border-radius: 28px; padding: 44px 40px; margin: 8px 0 64px;
-      display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end;
-      position: relative; overflow: hidden;
-    }
-    .destacado::before {   /* halo de color suave */
-      content: ""; position: absolute; inset: auto -20% -60% auto; width: 520px; height: 520px;
-      background: radial-gradient(closest-side, rgba(227, 6, 19, .45), transparent);
-      pointer-events: none;
-    }
-    .destacado > * { position: relative; }
-    .destacado .eyebrow { font-size: 14px; font-weight: 600; color: #ff6961; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .06em; }
-    .destacado h2 { font-size: clamp(28px, 4.5vw, 44px); line-height: 1.1; letter-spacing: -.025em; margin: 0 0 8px; font-weight: 700; }
-    .destacado .comp { color: #a1a1a6; margin: 0 0 18px; font-size: 17px; }
-    .destacado .cuando { font-size: 19px; margin: 0; }
-    .cuenta { text-align: right; }
-    .cuenta b { display: block; font-size: clamp(56px, 9vw, 88px); line-height: 1; letter-spacing: -.04em; font-weight: 700; }
-    .cuenta span { color: #a1a1a6; font-size: 15px; }
-    .destacado .acciones { margin-top: 22px; }
-    .destacado .boton-sec { color: #f5f5f7; border-color: rgba(255,255,255,.3); }
+    main.contenedor { padding-top: 16px; padding-bottom: 40px; }
 
     /* Botones tipo píldora */
-    .acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+    .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
     .boton, .boton-sec {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 980px;
-      transition: background .2s, border-color .2s;
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+      font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 980px; transition: background .2s, border-color .2s;
     }
     .boton { background: var(--acento); color: #fff; }
-    .boton:hover { background: var(--acento-hover); text-decoration: none; }
-    .boton-sec { border: 1px solid var(--linea); color: var(--acento); }
-    .boton-sec:hover { border-color: var(--acento); text-decoration: none; }
+    .boton:hover { background: var(--acento-hover); }
+    .boton-sec { border: 1px solid var(--linea); color: var(--acento); background: var(--superficie); }
+    .boton-sec:hover { border-color: var(--acento); }
 
-    /* Cabecera de la lista y selector segmentado */
-    .cabecera-lista { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
-    .cabecera-lista h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; margin: 0; font-weight: 700; }
-    .segmentos { display: inline-flex; background: var(--segmento); border-radius: 10px; padding: 2px; }
-    .segmentos button {
-      font: inherit; font-size: 14px; font-weight: 500; color: var(--texto);
-      border: 0; background: transparent; padding: 6px 16px; border-radius: 8px; cursor: pointer;
-      transition: background .2s, box-shadow .2s;
+    /* Afluencia: punto de color + texto */
+    .afluencia { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; }
+    .afluencia::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+    .n1 { --nivel: var(--verde); } .n2 { --nivel: var(--naranja); } .n3 { --nivel: var(--rojo); }
+    .afluencia.n1, .afluencia.n2, .afluencia.n3 { color: var(--nivel); }
+
+    /* Próximo evento */
+    .destacado { background: var(--superficie); border: 1px solid var(--linea); border-radius: 18px; padding: 16px; margin-bottom: 22px; }
+    .destacado .arriba { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .destacado .eyebrow { font-size: 12px; font-weight: 700; color: var(--rojo); text-transform: uppercase; letter-spacing: .05em; }
+    .destacado .faltan { background: var(--rojo); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 980px; white-space: nowrap; }
+    .destacado h2 { font-size: 20px; line-height: 1.2; letter-spacing: -.015em; margin: 0; overflow-wrap: anywhere; }
+    .destacado .detalle { color: var(--secundario); font-size: 14px; margin: 3px 0 12px; }
+    .zona {
+      display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center;
+      background: color-mix(in srgb, var(--nivel, var(--secundario)) 10%, transparent);
+      border-radius: 12px; padding: 10px 12px; font-size: 14px;
     }
-    .segmentos button[aria-pressed="true"] { background: var(--superficie); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
-    @media (prefers-color-scheme: dark) { .segmentos button[aria-pressed="true"] { background: #636366; } }
+    .zona .texto-franja { color: var(--secundario); font-size: 13px; }
+    .zona b { grid-column: 2; grid-row: 1 / span 2; font-size: 18px; letter-spacing: -.01em; white-space: nowrap; }
+    .zona b.pendiente { font-size: 13px; font-weight: 500; color: var(--secundario); white-space: normal; text-align: right; max-width: 14ch; }
+    .destacado .acciones { margin-top: 12px; }
 
-    /* Meses */
-    .mes { display: flex; align-items: baseline; gap: 10px; margin: 44px 0 14px; }
-    .mes h3 { font-size: 24px; letter-spacing: -.02em; margin: 0; font-weight: 600; text-transform: capitalize; }
-    .mes span { color: var(--secundario); font-size: 17px; }
-
-    /* Tarjetas de evento */
-    .evento {
-      display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: center;
-      background: var(--superficie); border-radius: var(--radio); padding: 20px 24px; margin-bottom: 12px;
-      box-shadow: var(--sombra); transition: transform .25s ease, box-shadow .25s ease;
-      animation: aparecer .5s ease both;
+    /* Filtros y nota */
+    .filtros { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filtros button {
+      font: inherit; font-size: 14px; font-weight: 500; color: var(--texto); background: var(--segmento);
+      border: 0; padding: 7px 14px; border-radius: 980px; cursor: pointer;
     }
-    .evento:hover { transform: translateY(-2px); box-shadow: var(--sombra-hover); }
-    @keyframes aparecer { from { opacity: 0; transform: translateY(8px); } }
+    .filtros button[aria-pressed="true"] { background: var(--texto); color: var(--fondo); }
+    .nota { color: var(--secundario); font-size: 13px; margin: 10px 4px 0; }
 
-    .calendario {   /* mini icono de calendario con la fecha */
-      width: 64px; border-radius: 14px; overflow: hidden; text-align: center;
-      background: var(--fondo); border: 1px solid var(--linea);
+    /* Lista agrupada por meses */
+    .mes { font-size: 13px; font-weight: 600; color: var(--secundario); text-transform: uppercase; letter-spacing: .06em; margin: 22px 4px 8px; }
+    .grupo { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); overflow: hidden; }
+    .fila {
+      display: grid; grid-template-columns: 44px 1fr auto; gap: 4px 12px; align-items: center;
+      padding: 12px 14px; border-top: 1px solid var(--linea); cursor: pointer;
     }
-    .calendario .m { background: var(--rojo); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .08em; padding: 3px 0; text-transform: uppercase; }
-    .calendario .d { font-size: 28px; font-weight: 600; line-height: 1.15; padding-top: 4px; letter-spacing: -.02em; }
-    .calendario .s { font-size: 11px; color: var(--secundario); padding-bottom: 6px; text-transform: capitalize; }
+    .fila:first-child { border-top: 0; }
+    .fila:hover { background: color-mix(in srgb, var(--segmento) 50%, transparent); }
+    .dia { text-align: center; line-height: 1.1; grid-row: 1 / span 2; align-self: start; padding-top: 2px; }
+    .dia b { display: block; font-size: 20px; font-weight: 600; }
+    .dia small { font-size: 11px; color: var(--secundario); text-transform: uppercase; }
+    .titulo { font-weight: 600; font-size: 15px; overflow-wrap: anywhere; }
+    .meta { font-size: 13px; color: var(--secundario); display: flex; gap: 4px 8px; flex-wrap: wrap; margin-top: 2px; }
+    .hora { font-size: 14px; font-weight: 600; text-align: right; white-space: nowrap; }
+    .hora.pendiente { font-size: 12px; font-weight: 400; color: var(--secundario); white-space: normal; max-width: 9ch; }
+    .franja { grid-column: 2 / 4; font-size: 13px; color: var(--secundario); }
+    .franja b { color: var(--texto); font-weight: 600; white-space: nowrap; }
+    .fila .acciones { grid-column: 2 / 4; margin-top: 8px; }
+    .vacio { color: var(--secundario); text-align: center; padding: 40px 0; }
 
-    .info { min-width: 0; }
-    .info h4 { font-size: 19px; line-height: 1.25; letter-spacing: -.015em; margin: 0; font-weight: 600; overflow-wrap: anywhere; }
-    .info .comp { color: var(--secundario); font-size: 14px; margin: 2px 0 0; }
-    .info .cuando { font-size: 15px; margin: 8px 0 0; }
-    .info .cuando .pendiente { color: var(--secundario); }
-    .info .acciones { margin-top: 12px; }
-    .info .boton-sec { font-size: 13px; padding: 5px 12px; }
+    /* Suscripción (al final, discreta) */
+    .suscribir { background: var(--superficie); border: 1px solid var(--linea); border-radius: 18px; padding: 18px 16px; margin-top: 32px; }
+    .suscribir h2 { font-size: 17px; margin: 0 0 4px; }
+    .suscribir p { color: var(--secundario); font-size: 14px; margin: 0 0 12px; }
+    .pie { color: var(--secundario); font-size: 12px; text-align: center; margin-top: 18px; }
 
-    /* Afluencia estimada y franja complicada (para los vecinos) */
-    .vecinos { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 10px 0 0; font-size: 14px; }
-    .afluencia { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
-    .afluencia::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; flex: none; }
-    .afluencia.n1 { color: var(--verde); }
-    .afluencia.n2 { color: var(--naranja); }
-    .afluencia.n3 { color: var(--rojo); }
-    .franja-zona { color: var(--secundario); }
-    .franja-zona b { color: var(--texto); font-weight: 600; }
-    .destacado .vecinos { font-size: 16px; margin-top: 14px; }
-    .destacado .franja-zona { color: #a1a1a6; }
-    .destacado .franja-zona b { color: #f5f5f7; }
-    .destacado .afluencia.n1 { color: #30d158; }
-    .destacado .afluencia.n2 { color: #ff9f0a; }
-    .destacado .afluencia.n3 { color: #ff6961; }
-    .nota-estimacion { color: var(--secundario); font-size: 14px; margin: 10px 0 0; max-width: 62ch; }
-
-    .etiqueta { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 980px; white-space: nowrap; align-self: start; }
-    .etiqueta.partido { color: var(--rojo); background: color-mix(in srgb, var(--rojo) 10%, transparent); }
-    .etiqueta.concierto { color: var(--morado); background: color-mix(in srgb, var(--morado) 12%, transparent); }
-    .etiqueta.otro { color: var(--secundario); background: var(--segmento); }
-    .vacio { color: var(--secundario); text-align: center; padding: 60px 0; }
-
-    /* Suscripciones */
-    .suscribir { padding: 96px 0 24px; }
-    .suscribir > h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; margin: 0 0 6px; text-align: center; font-weight: 700; }
-    .suscribir > p { text-align: center; color: var(--secundario); margin: 0 0 36px; font-size: 19px; }
-    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .tile { background: var(--superficie); border-radius: 24px; padding: 36px 32px; box-shadow: var(--sombra); }
-    .tile svg { width: 40px; height: 40px; margin-bottom: 16px; }
-    .tile h3 { font-size: 24px; letter-spacing: -.02em; margin: 0 0 8px; font-weight: 600; }
-    .tile p { color: var(--secundario); margin: 0 0 22px; font-size: 16px; }
-
-
-    /* Móvil */
-    @media (max-width: 640px) {
-      .contenedor { padding: 0 16px; }
-      .portada { padding: 48px 0 28px; }
-      .destacado { grid-template-columns: 1fr; padding: 32px 24px; border-radius: 24px; margin-bottom: 48px; }
-      .cuenta { text-align: left; order: -1; display: flex; align-items: baseline; gap: 8px; }
-      .cuenta b { display: inline; font-size: 44px; }
-      .cuenta span:empty { display: none; }
-      .evento { grid-template-columns: 56px 1fr; gap: 14px; padding: 16px; }
-      .calendario { width: 56px; }
-      .etiqueta { grid-column: 2; grid-row: 1; justify-self: start; margin-bottom: -6px; }
-      .evento .info { grid-column: 2; }
-      .evento .calendario { grid-row: 1 / span 2; align-self: start; }
-      .tile { padding: 28px 24px; }
-    }
     @media (prefers-reduced-motion: reduce) {
-      *, *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      * { transition: none !important; }
     }
   </style>
   <!-- Contador de visitas (GoatCounter, sin cookies). -->
@@ -249,9 +162,10 @@
 
 <header class="barra">
   <div class="contenedor">
-    <a class="marca" href="#"><img src="favicon.svg" alt="">Metropolitano</a>
+    <a class="marca" href="#"><img src="favicon.svg" alt=""><h1>Eventos Metropolitano Madrid</h1></a>
     <nav>
-      <a href="#eventos">Eventos</a>
+      <a class="icono lnk-telegram solo-telegram" hidden target="_blank" rel="noopener"
+         title="Avisos en Telegram" aria-label="Avisos en Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3.5 2.8 10.6c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22.2 4.7c.2-.8-.5-1.5-1.2-1.2zM7.6 13.5 18 7"/></svg></a>
       <details class="desplegable">
         <summary class="icono" title="Suscribirse al calendario" aria-label="Suscribirse al calendario"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></summary>
         <div class="menu" role="menu">
@@ -261,80 +175,38 @@
           <a href="eventos.ics" download role="menuitem">Descargar archivo .ics</a>
         </div>
       </details>
-      <a class="icono lnk-telegram solo-telegram" hidden target="_blank" rel="noopener"
-         title="Avisos en Telegram" aria-label="Avisos en Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3.5 2.8 10.6c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22.2 4.7c.2-.8-.5-1.5-1.2-1.2zM7.6 13.5 18 7"/></svg></a>
     </nav>
   </div>
 </header>
 
 <main class="contenedor">
-  <section class="portada">
-    <h1>Eventos estadio Metropolitano Madrid</h1>
-    <p class="lema">Partidos y conciertos en el Riyadh Air Metropolitano, siempre al día.</p>
-    <div class="cta">
-      <details class="desplegable">
-        <summary class="boton"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Suscribirme al calendario</summary>
-        <div class="menu" role="menu">
-          <small>Suscribirse al calendario</small>
-          <a class="lnk-google" target="_blank" rel="noopener" role="menuitem">Google Calendar</a>
-          <a class="lnk-webcal" role="menuitem">Apple / Outlook</a>
-          <a href="eventos.ics" download role="menuitem">Descargar archivo .ics</a>
-        </div>
-      </details>
-      <a class="boton-sec lnk-telegram solo-telegram" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3.5 2.8 10.6c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22.2 4.7c.2-.8-.5-1.5-1.2-1.2zM7.6 13.5 18 7"/></svg>Avisos en Telegram</a>
-    </div>
-    <p class="estado" id="estado">Cargando eventos…</p>
-  </section>
-
   <section class="destacado" id="destacado" hidden></section>
 
   <section id="eventos">
-    <div class="cabecera-lista">
-      <h2>Próximos eventos</h2>
-      <div class="segmentos" id="filtros" role="group" aria-label="Filtrar por tipo">
-        <button data-tipo="todos" aria-pressed="true">Todos</button>
-        <button data-tipo="partido" aria-pressed="false">Partidos</button>
-        <button data-tipo="concierto" aria-pressed="false">Conciertos</button>
-      </div>
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar por tipo">
+      <button data-tipo="todos" aria-pressed="true">Todos</button>
+      <button data-tipo="partido" aria-pressed="false">Partidos</button>
+      <button data-tipo="concierto" aria-pressed="false">Conciertos</button>
     </div>
-    <p class="nota-estimacion">La afluencia y la <b>zona complicada</b> (cuándo cuesta aparcar o circular por el barrio) son una estimación según el rival, la competición y el tipo de evento.</p>
-    <div id="lista"></div>
+    <p class="nota">La afluencia y la franja horaria complicada (cuándo cuesta aparcar o circular por el barrio) son una estimación. Toca un evento para añadirlo a tu calendario.</p>
+    <div id="lista"><p class="vacio">Cargando eventos…</p></div>
   </section>
 
   <section class="suscribir" id="suscribir">
-    <h2>No te pierdas nada.</h2>
-    <p>Recibe los eventos donde ya miras cada día.</p>
-    <div class="tiles">
-      <div class="tile">
-        <svg viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="3" y="6" width="34" height="31" rx="7" fill="var(--superficie)" stroke="var(--linea)" stroke-width="1.5"/>
-          <path d="M3 13a7 7 0 0 1 7-7h20a7 7 0 0 1 7 7v2H3z" fill="var(--rojo)"/>
-          <text x="20" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="var(--texto)" font-family="inherit">17</text>
-        </svg>
-        <h3>Calendario</h3>
-        <p>Suscríbete y los eventos aparecerán solos en tu calendario, con los cambios de hora incluidos.</p>
-        <div class="acciones">
-          <a class="boton lnk-google" target="_blank" rel="noopener">Google Calendar</a>
-          <a class="boton-sec lnk-webcal">Apple / Outlook</a>
-          <a class="boton-sec" href="eventos.ics" download>Descargar .ics</a>
-        </div>
-      </div>
-      <div class="tile solo-telegram" hidden>
-        <svg viewBox="0 0 40 40" aria-hidden="true">
-          <circle cx="20" cy="20" r="18" fill="#2aabee"/>
-          <path d="M9.5 19.6l17.2-6.6c.8-.3 1.5.2 1.2 1.4l-2.9 13.8c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.5.4-.9.4l.3-4.6 8.4-7.6c.4-.3-.1-.5-.6-.2l-10.4 6.5-4.5-1.4c-1-.3-1-1 .5-1.3z" fill="#fff"/>
-        </svg>
-        <h3>Avisos en Telegram</h3>
-        <p>Únete al canal: te avisará de nuevos eventos, horas confirmadas y del evento del día siguiente.</p>
-        <div class="acciones"><a class="boton lnk-telegram" target="_blank" rel="noopener">Unirme al canal</a></div>
-      </div>
+    <h2>No te pierdas nada</h2>
+    <p>Suscríbete y los eventos aparecerán solos en tu calendario, con los cambios de hora incluidos.<span class="solo-telegram" hidden> O únete al canal de Telegram para recibir avisos.</span></p>
+    <div class="acciones">
+      <a class="boton lnk-google" target="_blank" rel="noopener">Google Calendar</a>
+      <a class="boton-sec lnk-webcal">Apple / Outlook</a>
+      <a class="boton-sec" href="eventos.ics" download>Descargar .ics</a>
+      <a class="boton-sec lnk-telegram solo-telegram" hidden target="_blank" rel="noopener">Canal de Telegram</a>
     </div>
   </section>
-
+  <p class="pie" id="estado"></p>
 </main>
 
 <script>
-  const NOMBRE_TIPO = { partido: "Partido", concierto: "Concierto", otro: "Otro" };
+  const NOMBRE_TIPO = { partido: "Partido", concierto: "Concierto", otro: "Evento" };
   const DURACION_HORAS = { partido: 2, concierto: 3, otro: 2 };  // igual que en recoger_eventos.py
   const LUGAR = "Estadio Riyadh Air Metropolitano, Av. de Luis Aragonés s/n, Madrid";
 
@@ -356,12 +228,22 @@
   document.addEventListener("keydown", ev => { if (ev.key === "Escape") cerrarMenus(); });
 
   // Separa "Atlético de Madrid - Viking FK (UEFA Champions League. Jornada 5)"
-  // en título ("Atlético de Madrid – Viking FK") y competición ("UEFA Champions League · Jornada 5")
+  // en título ("Atlético – Viking FK") y competición ("UEFA Champions League · Jornada 5")
   function partirTitulo(texto) {
     const m = texto.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
-    const principal = (m ? m[1] : texto).replace(/\s+-\s+/g, " – ");
+    const principal = (m ? m[1] : texto).replace(/\s+-\s+/g, " – ").replace(/^Atlético de Madrid\b/, "Atlético");
     const comp = m ? m[2].replace(/\.\s+/g, " · ").replace(/\.$/, "") : "";
     return { principal, comp };
+  }
+
+  // Nombre corto de la competición para la lista ("LaLiga", "Champions"...)
+  function compCorta(e, comp) {
+    if (/final/i.test(comp) && /champions/i.test(comp)) return "Final de la Champions";
+    if (/champions/i.test(comp)) return "Champions";
+    if (/laliga/i.test(comp)) return "LaLiga";
+    if (/copa del rey/i.test(comp)) return "Copa del Rey";
+    if (/europa league/i.test(comp)) return "Europa League";
+    return comp ? comp.split(" · ")[0] : NOMBRE_TIPO[e.tipo] || "";
   }
 
   // Calcula inicio y fin de un evento como textos "AAAAMMDD" o "AAAAMMDDTHHMMSS"
@@ -394,14 +276,7 @@
   // Dos avisos, igual que en el calendario completo (recoger_eventos.py):
   // 24 h y 3 h antes; sin hora, a las 10:00 del día anterior y del mismo día
   function alarmasIcs(e, conHora) {
-    let diaAntes, mismoDia;
-    if (conHora) {
-      diaAntes = -24 * 60;
-      mismoDia = -180;
-    } else {
-      diaAntes = -840;
-      mismoDia = 600;
-    }
+    const [diaAntes, mismoDia] = conHora ? [-24 * 60, -180] : [-840, 600];
     const alarma = (texto, min) => ["BEGIN:VALARM", "ACTION:DISPLAY",
       "DESCRIPTION:" + texto, "TRIGGER:" + (min < 0 ? "-" : "") + "PT" + Math.abs(min) + "M", "END:VALARM"];
     return [...alarma("Mañana en el Metropolitano", diaAntes), ...alarma("Hoy en el Metropolitano", mismoDia)];
@@ -435,48 +310,39 @@
 
   // Convierte "2026-11-25" en una fecha (a mediodía, para evitar líos de zona horaria)
   const aFecha = (texto) => new Date(texto + "T12:00:00");
-  const fechaLarga = (e) => {
-    let t = aFecha(e.fecha).toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
-    if (e.fecha_fin) t += " – " + aFecha(e.fecha_fin).toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+  const corta = (texto, opciones) => aFecha(texto).toLocaleDateString("es-ES", opciones).replace(".", "");
+  const fechaMedia = (e) => {
+    let t = corta(e.fecha, { weekday: "long", day: "numeric", month: "short" });
+    if (e.fecha_fin) t += " – " + corta(e.fecha_fin, { day: "numeric", month: "short" });
     return t.charAt(0).toUpperCase() + t.slice(1);
   };
 
-  // Afluencia estimada y franja en la que la zona está complicada (las calcula recoger_eventos.py)
-  function pintarVecinos(e, contenedor) {
-    const af = e.afluencia;
-    if (!af) return;
-    const caja = document.createElement("p");
-    caja.className = "vecinos";
-    const nivel = document.createElement("span");
-    nivel.className = "afluencia n" + af.nivel;
-    nivel.textContent = af.texto;
-    nivel.title = af.motivo;
-    const zona = document.createElement("span");
-    zona.className = "franja-zona";
-    if (e.zona_complicada) {
-      zona.append("Zona complicada ");
-      const b = document.createElement("b");
-      b.textContent = e.zona_complicada.desde + "–" + e.zona_complicada.hasta;
-      zona.append(b);
-    } else {
-      zona.textContent = "Zona complicada: cuando se confirme la hora";
-    }
-    caja.append(nivel, zona);
-    contenedor.append(caja);
+  // Crea un elemento con clase y texto (textContent evita que un título raro rompa la página)
+  function el(etiqueta, clase, texto) {
+    const x = document.createElement(etiqueta);
+    if (clase) x.className = clase;
+    if (texto != null) x.textContent = texto;
+    return x;
+  }
+
+  function afluencia(e) {
+    if (!e.afluencia) return null;
+    const s = el("span", "afluencia n" + e.afluencia.nivel, e.afluencia.texto);
+    s.title = e.afluencia.motivo;
+    return s;
   }
 
   // Botones "Añadir a Google" / "Apple/Outlook" para un evento
   function botonesCalendario(e, contenedor, corto = false) {
-    const g = document.createElement("a");
-    g.className = "boton-sec"; g.target = "_blank"; g.rel = "noopener";
-    g.href = enlaceGoogle(e); g.textContent = corto ? "+ Google" : "+ Google Calendar";
-    const i = document.createElement("a");
-    i.className = "boton-sec"; i.href = "#"; i.textContent = corto ? "+ Apple/Outlook" : "+ Apple / Outlook";
+    const g = el("a", "boton-sec", corto ? "+ Google" : "+ Google Calendar");
+    g.target = "_blank"; g.rel = "noopener"; g.href = enlaceGoogle(e);
+    const i = el("a", "boton-sec", corto ? "+ Apple/Outlook" : "+ Apple / Outlook");
+    i.href = "#";
     i.addEventListener("click", ev => { ev.preventDefault(); descargarIcs(e); });
     contenedor.append(g, i);
   }
 
-  // Tarjeta grande con el próximo evento y la cuenta atrás
+  // Tarjeta con el próximo evento, su afluencia y la franja horaria complicada
   function pintarDestacado() {
     const caja = document.getElementById("destacado");
     const e = eventos[0];
@@ -484,73 +350,86 @@
     const { principal, comp } = partirTitulo(e.titulo);
     const hoy = new Date(); hoy.setHours(12, 0, 0, 0);
     const dias = Math.round((aFecha(e.fecha) - hoy) / 864e5);
-    const [num, texto] = dias <= 0 ? ["Hoy", ""] : dias === 1 ? ["Mañana", ""] : [String(dias), "días"];
-    caja.innerHTML = `
-      <div>
-        <p class="eyebrow">Próximo evento</p>
-        <h2></h2><p class="comp"></p>
-        <p class="cuando"></p>
-        <div class="acciones"></div>
-      </div>
-      <div class="cuenta"><span>${dias > 1 ? "Faltan" : ""}</span><b>${num}</b><span>${texto}</span></div>`;
-    caja.querySelector("h2").textContent = principal;
-    caja.querySelector(".comp").textContent = comp || NOMBRE_TIPO[e.tipo];
-    caja.querySelector(".cuando").textContent = fechaLarga(e) + " · " + (e.hora ? e.hora + "\u00a0h" : "hora por confirmar");
-    const acciones = caja.querySelector(".acciones");
-    pintarVecinos(e, caja.querySelector(".cuando").parentNode);
-    caja.querySelector(".vecinos")?.after(acciones);
+    const faltan = dias <= 0 ? "hoy" : dias === 1 ? "mañana" : "en " + dias + " días";
+
+    const arriba = el("div", "arriba");
+    arriba.append(el("span", "eyebrow", "Próximo evento"), el("span", "faltan", faltan));
+    const detalle = [compCorta(e, comp), fechaMedia(e), e.hora ? e.hora + " h" : "hora por confirmar"];
+    caja.replaceChildren(arriba, el("h2", null, principal), el("p", "detalle", detalle.join(" · ")));
+
+    if (e.afluencia) {
+      const zona = el("div", "zona n" + e.afluencia.nivel);
+      const z = e.zona_complicada;
+      zona.append(afluencia(e), el("span", "texto-franja", "Franja horaria complicada"),
+        z ? el("b", null, z.desde + "–" + z.hasta) : el("b", "pendiente", "cuando se confirme la hora"));
+      caja.append(zona);
+    }
+    const acciones = el("div", "acciones");
     botonesCalendario(e, acciones);
+    caja.append(acciones);
     caja.hidden = false;
+  }
+
+  // Fila de la lista; al tocarla muestra los botones para añadirla al calendario
+  function fila(e) {
+    const { principal, comp } = partirTitulo(e.titulo);
+    const f = el("article", "fila");
+    f.tabIndex = 0;
+
+    const dia = el("div", "dia");
+    dia.append(el("b", null, aFecha(e.fecha).getDate()), el("small", null, corta(e.fecha, { weekday: "short" })));
+
+    const info = el("div");
+    const meta = el("div", "meta");
+    meta.append(compCorta(e, comp));
+    if (e.fecha_fin) meta.append(el("span", null, "hasta el " + corta(e.fecha_fin, { day: "numeric", month: "short" })));
+    const af = afluencia(e);
+    if (af) meta.append(af);
+    info.append(el("div", "titulo", principal), meta);
+
+    const hora = e.hora ? el("div", "hora", e.hora) : el("div", "hora pendiente", "Hora por confirmar");
+    f.append(dia, info, hora);
+
+    if (e.zona_complicada) {
+      const fr = el("div", "franja", "Franja horaria complicada ");
+      fr.append(el("b", null, e.zona_complicada.desde + "–" + e.zona_complicada.hasta));
+      f.append(fr);
+    }
+
+    const acciones = el("div", "acciones");
+    acciones.hidden = true;
+    botonesCalendario(e, acciones, true);
+    f.append(acciones);
+    const alternar = (ev) => {
+      if (ev.target.closest("a")) return;
+      acciones.hidden = !acciones.hidden;
+    };
+    f.addEventListener("click", alternar);
+    f.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); alternar(ev); } });
+    return f;
   }
 
   function pintar() {
     const lista = document.getElementById("lista");
     const visibles = eventos.filter(e => filtro === "todos" || e.tipo === filtro);
     if (!visibles.length) {
-      lista.innerHTML = '<p class="vacio">No hay eventos de este tipo.</p>';
+      lista.replaceChildren(el("p", "vacio", "No hay eventos de este tipo."));
       return;
     }
-    let mesActual = "";
-    lista.innerHTML = "";
-    visibles.forEach((e, n) => {
+    const anioActual = new Date().getFullYear();
+    let mesActual = "", grupo = null;
+    lista.replaceChildren();
+    visibles.forEach(e => {
       const f = aFecha(e.fecha);
-      const mes = f.toLocaleDateString("es-ES", { month: "long" });
-      const clave = mes + f.getFullYear();
+      const clave = f.getFullYear() + "-" + f.getMonth();
       if (clave !== mesActual) {
         mesActual = clave;
-        lista.insertAdjacentHTML("beforeend", `<div class="mes"><h3>${mes}</h3><span>${f.getFullYear()}</span></div>`);
+        let titulo = f.toLocaleDateString("es-ES", { month: "long" });
+        if (f.getFullYear() !== anioActual) titulo += " " + f.getFullYear();
+        grupo = el("div", "grupo");
+        lista.append(el("h3", "mes", titulo), grupo);
       }
-      const { principal, comp } = partirTitulo(e.titulo);
-      const tarjeta = document.createElement("article");
-      tarjeta.className = "evento";
-      tarjeta.style.animationDelay = Math.min(n * 40, 400) + "ms";
-      tarjeta.innerHTML = `
-        <div class="calendario">
-          <div class="m">${f.toLocaleDateString("es-ES", { month: "short" }).replace(".", "")}</div>
-          <div class="d">${f.getDate()}</div>
-          <div class="s">${f.toLocaleDateString("es-ES", { weekday: "short" }).replace(".", "")}</div>
-        </div>
-        <div class="info">
-          <h4></h4>
-          <p class="comp"></p>
-          <p class="cuando"></p>
-          <div class="acciones"></div>
-        </div>
-        <span class="etiqueta ${e.tipo}">${NOMBRE_TIPO[e.tipo] || e.tipo}</span>`;
-      // textContent evita que un título raro rompa la página
-      tarjeta.querySelector("h4").textContent = principal;
-      const pComp = tarjeta.querySelector(".comp");
-      if (comp) pComp.textContent = comp; else pComp.remove();
-      const cuando = tarjeta.querySelector(".cuando");
-      cuando.textContent = fechaLarga(e) + " · ";
-      const hora = document.createElement("span");
-      hora.textContent = e.hora ? e.hora + "\u00a0h" : "hora por confirmar";
-      if (!e.hora) hora.className = "pendiente";
-      cuando.append(hora);
-      pintarVecinos(e, tarjeta.querySelector(".info"));
-      tarjeta.querySelector(".info").append(tarjeta.querySelector(".info .acciones"));
-      botonesCalendario(e, tarjeta.querySelector(".acciones"), true);
-      lista.appendChild(tarjeta);
+      grupo.append(fila(e));
     });
   }
 
@@ -563,14 +442,14 @@
     pintar();
   });
 
-  // Tarjeta de Telegram: solo aparece si se ha configurado el canal (config.json lo crea el robot)
+  // Telegram: solo aparece si se ha configurado el canal (config.json lo crea el robot)
   fetch("config.json")
     .then(r => r.ok ? r.json() : {})
     .then(cfg => {
       const canal = (cfg.telegram || "").trim().replace(/^@/, "");
       if (/^[A-Za-z0-9_]{5,}$/.test(canal)) {
         document.querySelectorAll(".lnk-telegram").forEach(a => a.href = "https://t.me/" + canal);
-        document.querySelectorAll(".solo-telegram").forEach(el => el.hidden = false);
+        document.querySelectorAll(".solo-telegram").forEach(x => x.hidden = false);
       }
     })
     .catch(() => {});
@@ -582,14 +461,15 @@
         (a.fecha + (a.hora || "99:99")).localeCompare(b.fecha + (b.hora || "99:99")));
       const partidos = eventos.filter(e => e.tipo === "partido").length;
       const conciertos = eventos.filter(e => e.tipo === "concierto").length;
-      document.getElementById("estado").textContent =
-        `${partidos} partidos · ${conciertos} conciertos`;
+      let estado = `${partidos} partidos · ${conciertos} conciertos`;
+      if (datos.actualizado) estado += " · actualizado el " + corta(datos.actualizado, { day: "numeric", month: "long" });
+      document.getElementById("estado").textContent = estado;
       pintarDestacado();
       pintar();
     })
     .catch(() => {
-      document.getElementById("estado").textContent =
-        "No se pudo cargar eventos.json. ¿Has abierto la página con el servidor local? (mira el README)";
+      document.getElementById("lista").replaceChildren(el("p", "vacio",
+        "No se pudo cargar eventos.json. ¿Has abierto la página con el servidor local? (mira el README)"));
     });
 </script>
 </body>
