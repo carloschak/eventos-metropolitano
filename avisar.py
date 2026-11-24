@@ -34,7 +34,8 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 CARPETA = Path(__file__).parent
-WEB = os.environ.get("WEB_URL", "https://carloschak.github.io/eventos-metropolitano/")
+# Si la publicación de la web falla, WEB_URL llega vacía: se usa la dirección de siempre.
+WEB = os.environ.get("WEB_URL") or "https://carloschak.github.io/eventos-metropolitano/"
 
 DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 COLOR_NIVEL = {1: "🟢", 2: "🟠", 3: "🔴"}  # afluencia estimada (ver recoger_eventos.py)
