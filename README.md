@@ -155,7 +155,7 @@ La web se publica en **https://eventosmadridmetropolitano.es** (GitHub Pages con
 
 - **DNS (en Hostalia):** 4 registros A (`185.199.108.153` … `185.199.111.153`) y 4 AAAA
   (`2606:50c0:8000::153` … `8003::153`) en el dominio principal, un CNAME `www` →
-  `carloschak.github.io`, y el TXT `_github-pages-challenge-carloschak` que verifica el dominio
+  `<tu-usuario>.github.io`, y el TXT `_github-pages-challenge-<tu-usuario>` que verifica el dominio
   en GitHub (no lo borres). Los registros MX, SPF y `mx` son del correo.
 - **GitHub:** Settings → Pages → Custom domain = `eventosmadridmetropolitano.es`, con
   **Enforce HTTPS** marcado. `www` y la dirección antigua de `github.io` redirigen solas.
