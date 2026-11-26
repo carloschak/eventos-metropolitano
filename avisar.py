@@ -14,6 +14,8 @@ Cada canal solo se usa si tiene sus llaves puestas:
                          EMAIL_SMTP (opcional, por defecto smtp.gmail.com)
   WhatsApp (CallMeBot):  WHATSAPP_TELEFONO, WHATSAPP_APIKEY
   Canal de Telegram:     TELEGRAM_TOKEN (la llave del bot), TELEGRAM_CANAL (p. ej. @micanal)
+  Avisos push (móvil):   PUSH_API, PUSH_ADMIN_TOKEN, VAPID_PRIVATE_KEY (ver avisos_push.py).
+                         Solo el recordatorio del día antes.
 
 Uso:
     python3 avisar.py            # avisa solo si hay algo que contar
@@ -33,9 +35,11 @@ from email.message import EmailMessage
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import avisos_push
+
 CARPETA = Path(__file__).parent
 # Si la publicación de la web falla, WEB_URL llega vacía: se usa la dirección de siempre.
-WEB = os.environ.get("WEB_URL") or "https://carloschak.github.io/eventos-metropolitano/"
+WEB = os.environ.get("WEB_URL") or "https://eventosmadridmetropolitano.es/"
 
 DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 COLOR_NIVEL = {1: "🟢", 2: "🟠", 3: "🔴"}  # afluencia estimada (ver recoger_eventos.py)
@@ -66,24 +70,32 @@ def describir(ev):
     return linea
 
 
+def cargar_eventos():
+    return leer_json("eventos.json", {"eventos": []})["eventos"]
+
+
+def eventos_del_dia(eventos, dias_desde_hoy):
+    """Eventos que empiezan hoy (0) o mañana (1), según la hora de Madrid.
+    La usan todos los canales: Telegram/email/WhatsApp y los avisos push."""
+    dia = datetime.now(ZoneInfo("Europe/Madrid")).date() + timedelta(days=dias_desde_hoy)
+    return [e for e in eventos if e["fecha"] == dia.isoformat()]
+
+
 def redactar(prueba=False):
     """Prepara el texto del aviso. Devuelve None si no hay nada que contar."""
-    eventos = leer_json("eventos.json", {"eventos": []})["eventos"]
+    eventos = cargar_eventos()
     cambios = leer_json("cambios.json", [])
-    hoy = datetime.now(ZoneInfo("Europe/Madrid")).date()
-    manana = (hoy + timedelta(days=1)).isoformat()
-    hoy = hoy.isoformat()
 
     partes = []
     if prueba:
         partes.append("✅ Mensaje de prueba: los avisos funcionan.\n\nPróximos eventos:\n"
                       + "\n".join(describir(e) for e in eventos[:3]))
 
-    de_hoy = [e for e in eventos if e["fecha"] == hoy]
+    de_hoy = eventos_del_dia(eventos, 0)
     if de_hoy:
         partes.append("🏟️ Hoy en el Metropolitano:\n" + "\n".join(describir(e) for e in de_hoy))
 
-    de_manana = [e for e in eventos if e["fecha"] == manana]
+    de_manana = eventos_del_dia(eventos, 1)
     if de_manana:
         partes.append("📅 Mañana en el Metropolitano:\n" + "\n".join(describir(e) for e in de_manana))
 
@@ -174,18 +186,26 @@ def con_reintentos(enviar, texto, intentos=3):
 
 
 def main():
-    texto = redactar(prueba="--prueba" in sys.argv)
+    prueba = "--prueba" in sys.argv
+    errores = []
+
+    texto = redactar(prueba=prueba)
     if texto is None:
         print("Nada nuevo que avisar hoy.")
-        return
-    print("Mensaje:\n" + texto + "\n")
+    else:
+        print("Mensaje:\n" + texto + "\n")
+        for enviar in (enviar_email, enviar_whatsapp, enviar_telegram):
+            try:
+                con_reintentos(enviar, texto)
+            except Exception as e:  # un canal que falla no impide probar el otro
+                errores.append(f"{enviar.__name__}: {e}")
 
-    errores = []
-    for enviar in (enviar_email, enviar_whatsapp, enviar_telegram):
-        try:
-            con_reintentos(enviar, texto)
-        except Exception as e:  # un canal que falla no impide probar el otro
-            errores.append(f"{enviar.__name__}: {e}")
+    # Avisos push en el móvil: solo el recordatorio del día antes (mismos eventos que en Telegram)
+    try:
+        avisos_push.enviar(eventos_del_dia(cargar_eventos(), 1), WEB, prueba=prueba)
+    except Exception as e:
+        errores.append(f"avisos_push: {e}")
+
     if errores:
         print("Errores:\n" + "\n".join(errores))
         sys.exit(1)  # así la ejecución sale en rojo en GitHub y te enteras

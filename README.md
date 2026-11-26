@@ -11,6 +11,11 @@ Recoge los próximos partidos y conciertos del estadio y los muestra en una pág
 | `eventos.ics` | Los mismos eventos en formato calendario (Google, Apple, Outlook) |
 | `avisar.py` | Envía avisos por email, WhatsApp y/o canal de Telegram cuando hay novedades |
 | `index.html` | La página que muestra los eventos |
+| `manifest.json`, `sw.js`, `iconos/` | Lo que convierte la web en una app instalable (PWA) |
+| `privacidad.html` | Política de privacidad (enlazada junto al botón de avisos) |
+| `avisos_push.py` | Envía los avisos al móvil (lo llama `avisar.py`) |
+| `generar_claves_vapid.py` | Crea las claves de los avisos al móvil (solo una vez) |
+| `worker/` | El pequeño servidor (Cloudflare) que guarda quién quiere avisos |
 | `requirements.txt` | Librerías de Python que necesita el script |
 
 ## Cómo usarlo
@@ -143,6 +148,129 @@ Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
 **"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.
 Ojo: si Telegram está configurado, la prueba también se publica en el canal (puedes
 borrarla después desde Telegram).
+
+## Dominio
+
+La web se publica en **https://eventosmadridmetropolitano.es** (GitHub Pages con dominio propio).
+
+- **DNS (en Hostalia):** 4 registros A (`185.199.108.153` … `185.199.111.153`) y 4 AAAA
+  (`2606:50c0:8000::153` … `8003::153`) en el dominio principal, un CNAME `www` →
+  `carloschak.github.io`, y el TXT `_github-pages-challenge-carloschak` que verifica el dominio
+  en GitHub (no lo borres). Los registros MX, SPF y `mx` son del correo.
+- **GitHub:** Settings → Pages → Custom domain = `eventosmadridmetropolitano.es`, con
+  **Enforce HTTPS** marcado. `www` y la dirección antigua de `github.io` redirigen solas.
+- **No lo cambies más:** las apps instaladas y las suscripciones a los avisos van ligadas al
+  dominio; si cambia, todos tendrían que volver a instalar y a activar los avisos.
+
+## App en el móvil y avisos push
+
+La web se puede **instalar como una app** (icono en la pantalla de inicio, se abre a pantalla
+completa y funciona sin conexión con los últimos eventos guardados):
+
+- **Android (Chrome):** aparece el botón **"Instalar app"** en la portada.
+- **iPhone (Safari):** Apple no permite un botón; sale un aviso que explica
+  **Compartir → Añadir a pantalla de inicio**. Desaparece al instalarla o al cerrarlo con la ×.
+
+Con la app instalada (en Android también desde el navegador) aparece **"Activar avisos"**:
+cada día a las 10:00 se manda a los suscriptores un aviso por cada evento del día siguiente,
+p. ej. *"Mañana hay Atlético de Madrid - Viking FK en el Metropolitano a las 21:00"*.
+En iPhone hace falta **iOS 16.4 o posterior** y abrir la web **desde su icono**.
+
+### Cómo funciona
+
+```
+Móvil ──"Activar avisos"──▶ Worker de Cloudflare (guarda la suscripción en KV)
+                                     ▲
+GitHub Actions 10:00 ── avisar.py ───┘ pide la lista, envía con las claves VAPID
+                                       y borra las suscripciones que dan error 404/410
+```
+
+Qué eventos se avisan lo decide `avisar.py` (la misma función que usa Telegram);
+`avisos_push.py` solo se encarga de enviarlos.
+
+### Ponerlo en marcha (una sola vez)
+
+**1. Claves VAPID.** En tu ordenador, en esta carpeta:
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+python3 generar_claves_vapid.py
+```
+
+Muestra dos claves. No las guardes en ningún archivo del proyecto.
+
+**2. El servidor de suscripciones (Cloudflare Worker, gratis).** Crea una cuenta en
+https://dash.cloudflare.com y, en la carpeta `worker`:
+
+```bash
+cd worker
+```
+
+```bash
+npx wrangler login
+```
+
+```bash
+npx wrangler kv namespace create SUSCRIPCIONES
+```
+
+Copia el `id` que te da y pégalo en `worker/wrangler.toml` (en `PEGA_AQUI_EL_ID`).
+Después inventa una contraseña larga para que GitHub pueda leer la lista (por ejemplo, la que
+genera `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`) y guárdala en el Worker:
+
+```bash
+npx wrangler secret put ADMIN_TOKEN
+```
+
+Y publícalo:
+
+```bash
+npx wrangler deploy
+```
+
+Te dirá su dirección, algo como `https://eventos-metropolitano-avisos.TU-CUENTA.workers.dev`.
+(Si cambias de dominio, cambia `ALLOWED_ORIGINS` en `wrangler.toml`
+y vuelve a hacer `deploy`.)
+
+**3. En GitHub** (**Settings → Secrets and variables → Actions**):
+
+| Dónde | Nombre | Valor |
+|---|---|---|
+| Secrets | `VAPID_PRIVATE_KEY` | la clave privada del paso 1 |
+| Secrets | `PUSH_ADMIN_TOKEN` | la misma contraseña que pusiste en `ADMIN_TOKEN` |
+| Variables | `VAPID_PUBLIC_KEY` | la clave pública del paso 1 |
+| Variables | `PUSH_API` | la dirección del Worker del paso 2 |
+
+**4.** Actions → "Actualizar eventos y publicar web" → **Run workflow** para publicar la web con
+el botón de avisos. El botón solo aparece cuando `PUSH_API` y `VAPID_PUBLIC_KEY` están puestas.
+
+### Probarlo en tu móvil
+
+**Android (Chrome):**
+1. Abre la web en Chrome → pulsa **Instalar app** (o menú ⋮ → *Instalar aplicación*).
+2. Abre la app desde el icono → **Activar avisos** → **Permitir**.
+3. En GitHub: Actions → Run workflow → marca **"Enviar un mensaje de prueba"**. En un par de
+   minutos llega *"Mensaje de prueba: los avisos en el móvil funcionan"*.
+
+**iPhone (iOS 16.4 o posterior):**
+1. Abre la web en **Safari** → botón **Compartir** (cuadrado con flecha) → **Añadir a pantalla
+   de inicio** → Añadir.
+2. Abre la app **desde el icono** (no desde Safari) → **Activar avisos** → **Permitir**.
+3. Lanza la prueba desde GitHub igual que en Android.
+
+Ojo: la prueba llega a **todos** los suscriptores (igual que pasa con el canal de Telegram).
+
+**Si no llega:** en el móvil, revisa que las notificaciones de "Metropolitano" estén permitidas
+(Ajustes → Notificaciones) y que el modo Concentración/No molestar no las oculte. En GitHub, el
+paso "Enviar avisos" muestra cuántos avisos se enviaron y si hubo errores. Para ver o borrar las
+suscripciones guardadas: panel de Cloudflare → Storage & Databases → KV → SUSCRIPCIONES.
+
+**Para darse de baja:** botón **Desactivar** en la propia web, o quitar el permiso de
+notificaciones, o borrar la app (en esos dos casos la suscripción se borra sola en el siguiente
+envío, cuando el servicio de push responde 404/410).
 
 ## Contador de visitas
 
