@@ -12,7 +12,7 @@ Variables de entorno (en GitHub: Secrets y Variables de Actions):
   PUSH_ADMIN_TOKEN    secreto compartido con el Worker (el mismo que su ADMIN_TOKEN)
   VAPID_PRIVATE_KEY   clave privada VAPID (secreta; se crea con generar_claves_vapid.py)
   VAPID_SUBJECT       opcional: contacto para los servicios de push (mailto:… o https://dominio);
-                      por defecto, el dominio de la web (https://carloschak.github.io)
+                      por defecto, el dominio de la web (https://eventosmadridmetropolitano.es)
 """
 
 import json

@@ -6,7 +6,7 @@ compatibility_date = "2025-06-01"
 
 [vars]
 # Webs que pueden suscribirse (separadas por comas, sin barra final)
-ALLOWED_ORIGINS = "https://carloschak.github.io"
+ALLOWED_ORIGINS = "https://eventosmadridmetropolitano.es,https://www.eventosmadridmetropolitano.es"
 
 # Base de datos donde se guardan las suscripciones.
 # Crea la tuya con `npx wrangler kv namespace create SUSCRIPCIONES` y pega aquí el id que te dé.

@@ -86,8 +86,8 @@ En la web, el recuadro **"Suscríbete al calendario"** añade todos los eventos 
 calendario y los mantiene al día solos (Google Calendar puede tardar hasta un día en
 refrescar). Cada evento tiene además botones para añadirlo suelto.
 
-Cada evento lleva **dos avisos**: el día antes a las 10:00 y el mismo día (3 horas antes si
-tiene hora; a las 10:00 si la hora está por confirmar). Apple Calendar los respeta; Google
+Cada evento lleva **dos avisos**: 24 horas antes y 3 horas antes. Si la hora está por
+confirmar, a las 10:00 del día anterior y a las 10:00 del mismo día. Apple Calendar los respeta; Google
 Calendar suele ignorar los avisos de calendarios suscritos (en ese caso, ponlos a mano en
 la configuración de ese calendario dentro de Google Calendar).
 
@@ -148,6 +148,19 @@ Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
 **"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.
 Ojo: si Telegram está configurado, la prueba también se publica en el canal (puedes
 borrarla después desde Telegram).
+
+## Dominio
+
+La web se publica en **https://eventosmadridmetropolitano.es** (GitHub Pages con dominio propio).
+
+- **DNS (en Hostalia):** 4 registros A (`185.199.108.153` … `185.199.111.153`) y 4 AAAA
+  (`2606:50c0:8000::153` … `8003::153`) en el dominio principal, un CNAME `www` →
+  `carloschak.github.io`, y el TXT `_github-pages-challenge-carloschak` que verifica el dominio
+  en GitHub (no lo borres). Los registros MX, SPF y `mx` son del correo.
+- **GitHub:** Settings → Pages → Custom domain = `eventosmadridmetropolitano.es`, con
+  **Enforce HTTPS** marcado. `www` y la dirección antigua de `github.io` redirigen solas.
+- **No lo cambies más:** las apps instaladas y las suscripciones a los avisos van ligadas al
+  dominio; si cambia, todos tendrían que volver a instalar y a activar los avisos.
 
 ## App en el móvil y avisos push
 
@@ -219,7 +232,7 @@ npx wrangler deploy
 ```
 
 Te dirá su dirección, algo como `https://eventos-metropolitano-avisos.TU-CUENTA.workers.dev`.
-(Si la web no está en `https://carloschak.github.io`, cambia `ALLOWED_ORIGINS` en `wrangler.toml`
+(Si cambias de dominio, cambia `ALLOWED_ORIGINS` en `wrangler.toml`
 y vuelve a hacer `deploy`.)
 
 **3. En GitHub** (**Settings → Secrets and variables → Actions**):
@@ -264,3 +277,11 @@ envío, cuando el servicio de push responde 404/410).
 La página usa [GoatCounter](https://www.goatcounter.com), gratuito y sin cookies (no hace falta banner de consentimiento).
 
 Las visitas se ven en https://eventos-metropolitano.goatcounter.com. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
+
+## Afluencia y zona complicada
+
+Cada evento lleva una **afluencia estimada** (🟢 normal, 🟠 mucha gente, 🔴 lleno total) y la
+**franja en la que la zona está complicada** para aparcar o circular. Es una estimación con reglas
+sencillas (rival, competición, ronda, concierto), no un dato oficial. Las reglas y las horas antes y
+después están al principio de la sección «Afluencia estimada» de `recoger_eventos.py`, por si
+quieres ajustarlas (por ejemplo, añadir un rival a `RIVALES_LLENO`).

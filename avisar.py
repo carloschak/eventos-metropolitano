@@ -38,9 +38,11 @@ from zoneinfo import ZoneInfo
 import avisos_push
 
 CARPETA = Path(__file__).parent
-WEB = os.environ.get("WEB_URL", "https://carloschak.github.io/eventos-metropolitano/")
+# Si la publicación de la web falla, WEB_URL llega vacía: se usa la dirección de siempre.
+WEB = os.environ.get("WEB_URL") or "https://eventosmadridmetropolitano.es/"
 
 DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+COLOR_NIVEL = {1: "🟢", 2: "🟠", 3: "🔴"}  # afluencia estimada (ver recoger_eventos.py)
 MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 
 
@@ -58,7 +60,14 @@ def describir(ev):
         ff = date.fromisoformat(ev["fecha_fin"])
         cuando += f" – {ff.day} {MESES[ff.month - 1]}"
     hora = ev["hora"] if ev.get("hora") else "hora por confirmar"
-    return f"• {cuando} · {hora} · {ev['titulo']}"
+    linea = f"• {cuando} · {hora} · {ev['titulo']}"
+    af = ev.get("afluencia")
+    if af:
+        linea += f"\n  {COLOR_NIVEL.get(af['nivel'], '')} {af['texto']}"
+        z = ev.get("zona_complicada")
+        if z:
+            linea += f" · zona complicada aprox. {z['desde']}–{z['hasta']}"
+    return linea
 
 
 def cargar_eventos():

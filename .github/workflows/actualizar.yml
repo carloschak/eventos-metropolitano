@@ -68,6 +68,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Recoger eventos
+        id: recoger
         run: python recoger_eventos.py
 
       - name: Guardar eventos.json y eventos.ics si han cambiado
@@ -98,10 +99,12 @@ jobs:
         uses: actions/deploy-pages@v4
 
       # Va al final: si falla el envío, la web ya está publicada igualmente.
+      # Se envía aunque falle la publicación de la web (GitHub Pages falla a veces),
+      # siempre que se hayan podido recoger los eventos.
       # Solo en la ejecución diaria o a mano: al subir cambios de código no se avisa
       # (si no, el recordatorio de "mañana" se repetiría con cada cambio).
       - name: Enviar avisos
-        if: github.event_name != 'push'
+        if: ${{ !cancelled() && steps.recoger.outcome == 'success' && github.event_name != 'push' }}
         env:
           EMAIL_USUARIO: ${{ secrets.EMAIL_USUARIO }}
           EMAIL_CLAVE: ${{ secrets.EMAIL_CLAVE }}
