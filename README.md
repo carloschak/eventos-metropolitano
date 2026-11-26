@@ -12,7 +12,7 @@ Recoge los próximos partidos y conciertos del estadio y los muestra en una pág
 | `avisar.py` | Envía avisos por email, WhatsApp y/o canal de Telegram cuando hay novedades |
 | `index.html` | La página que muestra los eventos |
 | `manifest.json`, `sw.js`, `iconos/` | Lo que convierte la web en una app instalable (PWA) |
-| `privacidad.html` | Política de privacidad (enlazada junto al botón de avisos) |
+| `privacidad.html` | Política de privacidad (enlazada al pie de la página) |
 | `avisos_push.py` | Envía los avisos al móvil (lo llama `avisar.py`) |
 | `generar_claves_vapid.py` | Crea las claves de los avisos al móvil (solo una vez) |
 | `worker/` | El pequeño servidor (Cloudflare) que guarda quién quiere avisos |
