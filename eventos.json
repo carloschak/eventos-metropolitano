@@ -1,25 +1,6 @@
 {
-  "actualizado": "2026-11-25",
+  "actualizado": "2026-11-26",
   "eventos": [
-    {
-      "fecha": "2026-11-25",
-      "fecha_fin": null,
-      "hora": "21:00",
-      "tipo": "partido",
-      "titulo": "Atlético de Madrid - Viking FK (UEFA Champions League. Fase Liga. Jornada 5)",
-      "lugar": "Estadio Riyadh Air Metropolitano",
-      "url": "https://www.esmadrid.com/agenda/atletico-madrid-viking-fk-uefa-champions-league-fase-liga-estadio-metropolitano",
-      "fuente": "esmadrid.com",
-      "afluencia": {
-        "nivel": 2,
-        "texto": "Mucha gente",
-        "motivo": "Partido de Champions League"
-      },
-      "zona_complicada": {
-        "desde": "18:30",
-        "hasta": "23:45"
-      }
-    },
     {
       "fecha": "2026-12-06",
       "fecha_fin": null,
