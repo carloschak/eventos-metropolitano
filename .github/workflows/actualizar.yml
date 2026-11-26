@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.publicar.outputs.page_url }}
+      url: ${{ steps.publicar.outputs.page_url || steps.publicar2.outputs.page_url }}
     steps:
       - name: Descargar el proyecto
         uses: actions/checkout@v4
@@ -94,8 +94,18 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
+      # A veces GitHub tarda unos segundos en "ver" el paquete recién subido y la publicación
+      # falla con "No artifacts named github-pages were found". Si pasa, se espera y se reintenta.
       - name: Publicar la web
         id: publicar
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Esperar antes de reintentar la publicación
+        if: steps.publicar.outcome == 'failure'
+        run: sleep 30
+      - name: Publicar la web (reintento)
+        id: publicar2
+        if: steps.publicar.outcome == 'failure'
         uses: actions/deploy-pages@v4
 
       # Va al final: si falla el envío, la web ya está publicada igualmente.
@@ -117,5 +127,5 @@ jobs:
           PUSH_ADMIN_TOKEN: ${{ secrets.PUSH_ADMIN_TOKEN }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
-          WEB_URL: ${{ steps.publicar.outputs.page_url }}
+          WEB_URL: ${{ steps.publicar.outputs.page_url || steps.publicar2.outputs.page_url }}
         run: python avisar.py ${{ inputs.prueba && '--prueba' || '' }}
