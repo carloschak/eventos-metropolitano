@@ -4,11 +4,11 @@
   - Recibe los avisos push y los muestra como notificación.
   Si cambias la lista de archivos de abajo, sube el número de VERSION.
 */
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = "metropolitano-" + VERSION;
 const ARCHIVOS = [
   "./", "index.html", "eventos.json", "manifest.json", "favicon.svg", "apple-touch-icon.png",
-  "iconos/icono-192.png", "iconos/icono-512.png", "privacidad.html",
+  "iconos/icono-192.png", "iconos/icono-512.png", "privacidad.html", "contacto.html",
 ];
 
 self.addEventListener("install", ev => {
@@ -23,7 +23,7 @@ self.addEventListener("activate", ev => {
 });
 
 // Primero la red (para tener siempre los eventos al día); si no hay conexión, la copia guardada.
-// Solo para archivos de esta web: fuentes, contador de visitas y la API de avisos van directos.
+// Solo para archivos de esta web: las fuentes y el servidor de avisos y contacto van directos.
 self.addEventListener("fetch", ev => {
   const url = new URL(ev.request.url);
   if (ev.request.method !== "GET" || url.origin !== location.origin) return;

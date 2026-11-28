@@ -9,13 +9,14 @@ Recoge los próximos partidos y conciertos del estadio y los muestra en una pág
 | `recoger_eventos.py` | El script que lee las webs y crea `eventos.json` |
 | `eventos.json` | Los eventos guardados (se regenera cada vez) |
 | `eventos.ics` | Los mismos eventos en formato calendario (Google, Apple, Outlook) |
-| `avisar.py` | Envía avisos por email, WhatsApp y/o canal de Telegram cuando hay novedades |
+| `avisar.py` | Envía avisos por email y/o WhatsApp cuando hay novedades, y los avisos al móvil |
 | `index.html` | La página que muestra los eventos |
 | `manifest.json`, `sw.js`, `iconos/` | Lo que convierte la web en una app instalable (PWA) |
 | `privacidad.html` | Política de privacidad (enlazada al pie de la página) |
+| `contacto.html` | Formulario de contacto y publicidad (enlazado al pie de la página) |
 | `avisos_push.py` | Envía los avisos al móvil (lo llama `avisar.py`) |
 | `generar_claves_vapid.py` | Crea las claves de los avisos al móvil (solo una vez) |
-| `worker/` | El pequeño servidor (Cloudflare) que guarda quién quiere avisos |
+| `worker/` | El pequeño servidor (Cloudflare) que guarda quién quiere avisos y envía el formulario de contacto |
 | `requirements.txt` | Librerías de Python que necesita el script |
 
 ## Cómo usarlo
@@ -124,30 +125,10 @@ texto de los mensajes, que aquí son solo eventos públicos).
    - `WHATSAPP_TELEFONO`: tu número con prefijo, p. ej. `+34600111222`
    - `WHATSAPP_APIKEY`: el número que te ha dado
 
-### Canal de Telegram (para los visitantes de la web)
-
-El robot publica las novedades en un canal público de Telegram; cualquiera puede unirse
-desde el botón de la web, sin dar su teléfono ni ningún dato.
-
-1. En Telegram: menú → **Nuevo canal** → ponle nombre → **Público** → elige el enlace,
-   p. ej. `t.me/eventos_metropolitano` (el nombre del canal es lo que va tras `t.me/`).
-2. Busca **@BotFather** (el oficial, con el tick azul) → escribe `/newbot` → dale un nombre
-   y un usuario terminado en `bot`. Te dará un **token** (algo como `123456:ABC-...`).
-   Es una contraseña: no la compartas.
-3. En tu canal: **Administradores → Añadir administrador** → busca tu bot → deja activado
-   **Publicar mensajes**.
-4. En GitHub (**Settings → Secrets and variables → Actions**):
-   - pestaña **Secrets** → `TELEGRAM_TOKEN`: el token del paso 2
-   - pestaña **Variables** → `TELEGRAM_CANAL`: el nombre del canal con @, p. ej. `@eventos_metropolitano`
-
-   La variable también hace aparecer el botón **"Unirme al canal"** en la web.
-
 ### Probar los avisos
 
 Actions → "Actualizar eventos y publicar web" → **Run workflow** → marca
 **"Enviar un mensaje de prueba"** → Run workflow. En un par de minutos debería llegarte.
-Ojo: si Telegram está configurado, la prueba también se publica en el canal (puedes
-borrarla después desde Telegram).
 
 ## Dominio
 
@@ -185,7 +166,7 @@ GitHub Actions 10:00 ── avisar.py ───┘ pide la lista, envía con las
                                        y borra las suscripciones que dan error 404/410
 ```
 
-Qué eventos se avisan lo decide `avisar.py` (la misma función que usa Telegram);
+Qué eventos se avisan lo decide `avisar.py`;
 `avisos_push.py` solo se encarga de enviarlos.
 
 ### Ponerlo en marcha (una sola vez)
@@ -261,7 +242,7 @@ el botón de avisos. El botón solo aparece cuando `PUSH_API` y `VAPID_PUBLIC_KE
 2. Abre la app **desde el icono** (no desde Safari) → **Activar avisos** → **Permitir**.
 3. Lanza la prueba desde GitHub igual que en Android.
 
-Ojo: la prueba llega a **todos** los suscriptores (igual que pasa con el canal de Telegram).
+Ojo: la prueba llega a **todos** los suscriptores.
 
 **Si no llega:** en el móvil, revisa que las notificaciones de "Metropolitano" estén permitidas
 (Ajustes → Notificaciones) y que el modo Concentración/No molestar no las oculte. En GitHub, el
@@ -272,11 +253,39 @@ suscripciones guardadas: panel de Cloudflare → Storage & Databases → KV → 
 notificaciones, o borrar la app (en esos dos casos la suscripción se borra sola en el siguiente
 envío, cuando el servicio de push responde 404/410).
 
-## Contador de visitas
+## Formulario de contacto
 
-La página usa [GoatCounter](https://www.goatcounter.com), gratuito y sin cookies (no hace falta banner de consentimiento).
+`contacto.html` (enlazada al pie, «Contacto y publicidad») envía los mensajes al mismo Worker de los
+avisos (ruta `/contacto`), que los manda por correo a `contacto@eventosmadridmetropolitano.es` usando
+el SMTP de ese buzón. El correo llega con **Responder a** = el email de quien escribe, así que basta
+con darle a *Responder*.
 
-Las visitas se ven en https://eventos-metropolitano.goatcounter.com. En *Settings* puedes hacer públicas las estadísticas para enseñárselas a anunciantes.
+Contra el spam: un campo oculto que solo rellenan los robots y un máximo de 5 mensajes por hora y
+dirección IP (de la IP solo se guarda un resumen cifrado, y se borra a la hora).
+
+**Ponerlo en marcha (una vez):**
+
+1. En `worker/wrangler.toml`, rellena `SMTP_HOST` con el servidor de **correo saliente (SMTP)** de
+   tu proveedor (lo encuentras en su panel o en la configuración del buzón en el móvil) y, si hace
+   falta, `SMTP_PUERTO` (`465` con SSL o `587` con STARTTLS).
+2. En la carpeta `worker`, guarda el usuario (la dirección completa del buzón) y su contraseña:
+
+   ```bash
+   npx wrangler secret put SMTP_USUARIO
+   ```
+
+   ```bash
+   npx wrangler secret put SMTP_CLAVE
+   ```
+
+3. Publica el Worker:
+
+   ```bash
+   npx wrangler deploy
+   ```
+
+4. Prueba a enviar un mensaje desde https://eventosmadridmetropolitano.es/contacto.html.
+   Si falla, `npx wrangler tail` muestra el error del servidor de correo.
 
 ## Afluencia y zona complicada
 

@@ -1,11 +1,13 @@
 /*
-  Servidor de suscripciones a los avisos push (Cloudflare Worker + KV).
+  Servidor de la web (Cloudflare Worker + KV): suscripciones a los avisos push y formulario de contacto.
 
   Solo guarda y borra suscripciones; el envío de los avisos lo hace avisar.py en GitHub Actions.
 
   Rutas públicas (las usa la web):
     POST /suscribir   cuerpo: la suscripción del navegador (endpoint + keys)
     POST /baja        cuerpo: { "endpoint": "..." }
+    POST /contacto    cuerpo: { "nombre", "email", "motivo", "mensaje", "web" (trampa para robots) }
+                      Envía el mensaje por correo (SMTP) a CONTACTO_DESTINO.
 
   Rutas privadas (las usa avisar.py; necesitan la cabecera "Authorization: Bearer <ADMIN_TOKEN>"):
     GET  /suscripciones   lista todas las suscripciones
@@ -15,7 +17,12 @@
     SUSCRIPCIONES      espacio KV (wrangler.toml)
     ALLOWED_ORIGINS    webs que pueden suscribirse, separadas por comas (wrangler.toml)
     ADMIN_TOKEN        secreto: `npx wrangler secret put ADMIN_TOKEN`
+    Formulario de contacto:
+    SMTP_HOST, SMTP_PUERTO, CONTACTO_DESTINO   (wrangler.toml)
+    SMTP_USUARIO, SMTP_CLAVE                   secretos: `npx wrangler secret put SMTP_USUARIO` (y SMTP_CLAVE)
 */
+
+import { connect } from "cloudflare:sockets";
 
 // Servicios de push de los navegadores. Así nadie puede usar este servidor para guardar otras direcciones.
 const SERVICIOS_PUSH = [
@@ -59,12 +66,13 @@ export default {
       }
 
       // --- Rutas públicas (la web) ---
-      if (url.pathname !== "/suscribir" && url.pathname !== "/baja") return responder({ error: "no encontrado" }, 404);
+      if (!["/suscribir", "/baja", "/contacto"].includes(url.pathname)) return responder({ error: "no encontrado" }, 404);
       if (!permitidos.includes(origen)) return responder({ error: "origen no permitido" }, 403);
       if (peticion.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
       if (peticion.method !== "POST") return responder({ error: "método no permitido" }, 405);
 
       const datos = await leerJSON(peticion);
+      if (url.pathname === "/contacto") return await contacto(datos, peticion, env, responder);
       if (url.pathname === "/suscribir") {
         const sub = validar(datos);
         if (!sub) return responder({ error: "suscripción no válida" }, 400);
@@ -139,4 +147,125 @@ async function tokenValido(peticion, env) {
   let dif = 0;
   for (let i = 0; i < x.length; i++) dif |= x[i] ^ y[i];
   return dif === 0;
+}
+
+// ---------------------------------------------------------------------------
+// Formulario de contacto
+// ---------------------------------------------------------------------------
+const MOTIVOS = { contacto: "Contacto", publicidad: "Publicidad / anunciarse", otro: "Otro" };
+const MAX_POR_HORA = 5;   // mensajes por dirección IP y hora (contra el spam)
+
+async function contacto(d, peticion, env, responder) {
+  if (!d || typeof d !== "object") return responder({ error: "datos no válidos" }, 400);
+  // Campo trampa: está oculto en la web, solo lo rellenan los robots. Se finge que todo fue bien.
+  if (d.web) return responder({ ok: true });
+
+  const limpiar = (v, max) => (typeof v === "string" ? v : "").replace(/\r\n?/g, "\n").trim().slice(0, max);
+  const nombre = limpiar(d.nombre, 100).replace(/[\n\t]+/g, " ");
+  const email = limpiar(d.email, 200);
+  const mensaje = limpiar(d.mensaje, 3000);
+  const motivo = MOTIVOS[d.motivo] ? d.motivo : "otro";
+  if (!nombre) return responder({ error: "Escribe tu nombre." }, 400);
+  if (!/^[^\s@<>"(),;:]+@[^\s@<>"(),;:]+\.[A-Za-z]{2,}$/.test(email)) return responder({ error: "El email no parece válido." }, 400);
+  if (mensaje.length < 10) return responder({ error: "El mensaje es demasiado corto." }, 400);
+
+  if (!env.SMTP_HOST || !env.SMTP_USUARIO || !env.SMTP_CLAVE) {
+    console.error("Contacto: falta configurar SMTP_HOST, SMTP_USUARIO o SMTP_CLAVE");
+    return responder({ error: "El formulario no está disponible ahora mismo." }, 503);
+  }
+
+  // Límite de envíos por IP (se guarda solo un resumen cifrado de la IP, durante una hora)
+  const ip = peticion.headers.get("CF-Connecting-IP") || "";
+  const claveIp = "contacto:" + (await sha256(ip)).slice(0, 32);
+  const enviados = Number(await env.SUSCRIPCIONES.get(claveIp)) || 0;
+  if (enviados >= MAX_POR_HORA) return responder({ error: "Has enviado muchos mensajes. Inténtalo más tarde." }, 429);
+  await env.SUSCRIPCIONES.put(claveIp, String(enviados + 1), { expirationTtl: 3600 });
+
+  const texto = `${MOTIVOS[motivo]}\n\nNombre: ${nombre}\nEmail: ${email}\n\n${mensaje}\n\n` +
+    "-- \nEnviado desde el formulario de contacto de la web. Responde a este correo para contestar.";
+  await enviarCorreo(env, {
+    asunto: `[Web] ${MOTIVOS[motivo]}: ${nombre}`,
+    texto,
+    responderA: email,
+  });
+  return responder({ ok: true });
+}
+
+// Envío por SMTP con el buzón de la web. Puerto 465 (TLS directo) o 587 (STARTTLS).
+async function enviarCorreo(env, { asunto, texto, responderA }) {
+  const puerto = Number(env.SMTP_PUERTO) || 465;
+  const usuario = env.SMTP_USUARIO;
+  const destino = env.CONTACTO_DESTINO || usuario;
+  let socket = connect({ hostname: env.SMTP_HOST, port: puerto },
+    { secureTransport: puerto === 465 ? "on" : "starttls", allowHalfOpen: false });
+  let lector = socket.readable.getReader(), escritor = socket.writable.getWriter();
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  let pendiente = "";
+
+  // Lee una respuesta completa del servidor (puede ocupar varias líneas: "250-..." y al final "250 ...")
+  async function leer(esperado) {
+    for (;;) {
+      const lineas = pendiente.split("\r\n");
+      for (let i = 0; i < lineas.length - 1; i++) {
+        if (/^\d{3}( |$)/.test(lineas[i])) {
+          const respuesta = lineas.slice(0, i + 1).join("\n");
+          pendiente = lineas.slice(i + 1).join("\r\n");
+          if (!String(lineas[i]).startsWith(String(esperado))) throw new Error("SMTP: " + respuesta);
+          return respuesta;
+        }
+      }
+      const { value, done } = await lector.read();
+      if (done) throw new Error("SMTP: conexión cerrada");
+      pendiente += dec.decode(value, { stream: true });
+    }
+  }
+  const enviar = (linea) => escritor.write(enc.encode(linea + "\r\n"));
+  const orden = async (linea, esperado) => { await enviar(linea); return leer(esperado); };
+  const dominio = usuario.split("@")[1] || "localhost";
+
+  try {
+    await leer(220);
+    await orden("EHLO " + dominio, 250);
+    if (puerto !== 465) {
+      await orden("STARTTLS", 220);
+      lector.releaseLock(); escritor.releaseLock();
+      socket = socket.startTls();
+      lector = socket.readable.getReader(); escritor = socket.writable.getWriter();
+      await orden("EHLO " + dominio, 250);
+    }
+    await orden("AUTH LOGIN", 334);
+    await orden(b64(usuario), 334);
+    await orden(b64(env.SMTP_CLAVE), 235);
+    await orden(`MAIL FROM:<${usuario}>`, 250);
+    await orden(`RCPT TO:<${destino}>`, 250);
+    await orden("DATA", 354);
+    const cuerpo = b64(texto.replace(/\n/g, "\r\n")).replace(/.{76}/g, "$&\r\n");
+    const cabeceras = [
+      `From: =?UTF-8?B?${b64("Web Eventos Madrid Metropolitano")}?= <${usuario}>`,
+      `To: <${destino}>`,
+      `Reply-To: <${responderA}>`,
+      `Subject: =?UTF-8?B?${b64(asunto)}?=`,
+      `Date: ${new Date().toUTCString().replace("GMT", "+0000")}`,
+      `Message-ID: <${crypto.randomUUID()}@${dominio}>`,
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: base64",
+    ];
+    // El cuerpo va en base64, así que ninguna línea puede empezar por "." (no hace falta escaparlas)
+    await orden(cabeceras.join("\r\n") + "\r\n\r\n" + cuerpo + "\r\n.", 250);
+    await enviar("QUIT").catch(() => {});
+  } finally {
+    socket.close().catch(() => {});
+  }
+}
+
+function b64(texto) {
+  let bin = "";
+  for (const b of new TextEncoder().encode(texto)) bin += String.fromCharCode(b);
+  return btoa(bin);
+}
+
+async function sha256(texto) {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, "0")).join("");
 }

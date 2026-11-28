@@ -13,7 +13,6 @@ Cada canal solo se usa si tiene sus llaves puestas:
   Email (Gmail u otro):  EMAIL_USUARIO, EMAIL_CLAVE, EMAIL_DESTINO (opcional),
                          EMAIL_SMTP (opcional, por defecto smtp.gmail.com)
   WhatsApp (CallMeBot):  WHATSAPP_TELEFONO, WHATSAPP_APIKEY
-  Canal de Telegram:     TELEGRAM_TOKEN (la llave del bot), TELEGRAM_CANAL (p. ej. @micanal)
   Avisos push (móvil):   PUSH_API, PUSH_ADMIN_TOKEN, VAPID_PRIVATE_KEY (ver avisos_push.py).
                          Solo el recordatorio del día antes.
 
@@ -27,7 +26,6 @@ import os
 import smtplib
 import sys
 import time
-import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta
@@ -76,7 +74,7 @@ def cargar_eventos():
 
 def eventos_del_dia(eventos, dias_desde_hoy):
     """Eventos que empiezan hoy (0) o mañana (1), según la hora de Madrid.
-    La usan todos los canales: Telegram/email/WhatsApp y los avisos push."""
+    La usan todos los canales: email/WhatsApp y los avisos push."""
     dia = datetime.now(ZoneInfo("Europe/Madrid")).date() + timedelta(days=dias_desde_hoy)
     return [e for e in eventos if e["fecha"] == dia.isoformat()]
 
@@ -144,33 +142,6 @@ def enviar_whatsapp(texto):
     print("WhatsApp: enviado.")
 
 
-def enviar_telegram(texto):
-    token = (os.environ.get("TELEGRAM_TOKEN") or "").strip()  # por si se copió con espacios
-    canal = (os.environ.get("TELEGRAM_CANAL") or "").strip()
-    if not (token and canal):
-        print("Telegram: no configurado, se omite.")
-        return
-    if not canal.startswith(("@", "-")):
-        canal = "@" + canal  # por si se escribe el nombre sin la @
-    datos = json.dumps({
-        "chat_id": canal,
-        "text": texto,
-        "link_preview_options": {"is_disabled": True},  # sin vista previa del enlace
-    }).encode("utf-8")
-    peticion = urllib.request.Request(
-        f"https://api.telegram.org/bot{token}/sendMessage",
-        data=datos, headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(peticion, timeout=30) as r:
-            respuesta = json.loads(r.read())
-    except urllib.error.HTTPError as e:
-        # Telegram explica el motivo del error en la respuesta (p. ej. "chat not found")
-        respuesta = json.loads(e.read() or b"{}")
-    if not respuesta.get("ok"):
-        raise RuntimeError(f"Telegram respondió: {respuesta.get('description', respuesta)}")
-    print("Telegram: publicado en el canal.")
-
-
 def con_reintentos(enviar, texto, intentos=3):
     """Si la conexión se corta (fallo de red), espera y lo vuelve a intentar.
     Si el servicio responde con un error de verdad (p. ej. token incorrecto),
@@ -194,13 +165,13 @@ def main():
         print("Nada nuevo que avisar hoy.")
     else:
         print("Mensaje:\n" + texto + "\n")
-        for enviar in (enviar_email, enviar_whatsapp, enviar_telegram):
+        for enviar in (enviar_email, enviar_whatsapp):
             try:
                 con_reintentos(enviar, texto)
             except Exception as e:  # un canal que falla no impide probar el otro
                 errores.append(f"{enviar.__name__}: {e}")
 
-    # Avisos push en el móvil: solo el recordatorio del día antes (mismos eventos que en Telegram)
+    # Avisos push en el móvil: solo el recordatorio del día antes
     try:
         avisos_push.enviar(eventos_del_dia(cargar_eventos(), 1), WEB, prueba=prueba)
     except Exception as e:

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto · Eventos Madrid Metropolitano</title>
+  <meta name="description" content="Escríbenos si quieres contactar con Eventos Madrid Metropolitano o anunciarte en la web.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Metropolitano">
+  <style>
+    :root { --fondo: #f5f5f7; --superficie: #fff; --texto: #1d1d1f; --secundario: #6e6e73; --linea: rgba(0,0,0,.12);
+            --acento: #0071e3; --acento-hover: #0077ed; --rojo: #d70015; --verde: #1a7f37; }
+    @media (prefers-color-scheme: dark) {
+      :root { --fondo: #000; --superficie: #1c1c1e; --texto: #f5f5f7; --secundario: #a1a1a6; --linea: rgba(255,255,255,.16);
+              --acento: #2997ff; --acento-hover: #47a6ff; --rojo: #ff453a; --verde: #3fb950; }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0; background: var(--fondo); color: var(--texto);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", Roboto, sans-serif;
+      font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+    }
+    main { max-width: 680px; margin: 0 auto; padding: 32px 20px 64px; }
+    a { color: var(--acento); }
+    h1 { font-size: clamp(30px, 6vw, 40px); letter-spacing: -.025em; line-height: 1.1; margin: 16px 0 8px; }
+    .intro { color: var(--secundario); margin: 0 0 8px; }
+    .volver { font-size: 15px; text-decoration: none; }
+    .caja { background: var(--superficie); border: 1px solid var(--linea); border-radius: 16px; padding: 20px; margin-top: 24px; }
+    label { display: block; font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+    .campo { margin-bottom: 16px; }
+    input, select, textarea {
+      width: 100%; font: inherit; font-size: 16px; color: var(--texto); background: var(--fondo);
+      border: 1px solid var(--linea); border-radius: 10px; padding: 10px 12px;
+    }
+    textarea { min-height: 160px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: transparent; }
+    .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .legal { color: var(--secundario); font-size: 14px; margin: 4px 0 16px; }
+    button {
+      font: inherit; font-size: 16px; font-weight: 600; color: #fff; background: var(--acento);
+      border: 0; border-radius: 980px; padding: 10px 22px; cursor: pointer;
+    }
+    button:hover { background: var(--acento-hover); }
+    button:disabled { opacity: .6; cursor: default; }
+    .estado { margin: 14px 0 0; font-size: 15px; }
+    .estado.error { color: var(--rojo); }
+    .ok { color: var(--verde); font-weight: 600; }
+  </style>
+</head>
+<body>
+<main>
+  <a class="volver" href="./">← Volver a los eventos</a>
+  <h1>Contacto</h1>
+  <p class="intro">¿Quieres decirnos algo, proponer una mejora o <strong>anunciarte en la web</strong>?
+    Escríbenos y te responderemos lo antes posible.</p>
+
+  <div class="caja">
+    <form id="formulario" novalidate>
+      <div class="campo">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" autocomplete="name" maxlength="100" required>
+      </div>
+      <div class="campo">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="200" required>
+      </div>
+      <div class="campo">
+        <label for="motivo">Motivo</label>
+        <select id="motivo" name="motivo">
+          <option value="contacto">Contacto general</option>
+          <option value="publicidad">Quiero anunciarme</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" maxlength="3000" required></textarea>
+      </div>
+      <!-- Campo trampa: oculto para las personas, solo lo rellenan los robots de spam -->
+      <div class="trampa" aria-hidden="true">
+        <label for="web">No rellenes este campo</label>
+        <input id="web" name="web" tabindex="-1" autocomplete="off">
+      </div>
+      <p class="legal">Usaremos tu nombre y tu email solo para responderte.
+        Más información en la <a href="privacidad.html">política de privacidad</a>.</p>
+      <button type="submit" id="enviar">Enviar mensaje</button>
+      <p class="estado" id="estado" role="status" hidden></p>
+    </form>
+    <p class="ok" id="gracias" role="status" hidden>¡Gracias! Hemos recibido tu mensaje y te responderemos pronto.</p>
+  </div>
+
+  <p class="intro" style="margin-top:24px;font-size:15px">También puedes escribirnos directamente a
+    <a href="mailto:contacto@eventosmadridmetropolitano.es">contacto@eventosmadridmetropolitano.es</a>.</p>
+</main>
+<script>
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+
+  const form = document.getElementById("formulario");
+  const estado = document.getElementById("estado");
+  const boton = document.getElementById("enviar");
+  const avisar = (texto) => { estado.textContent = texto; estado.className = "estado error"; estado.hidden = !texto; };
+
+  // La dirección del servidor viene en config.json (lo crea el robot al publicar la web)
+  const api = fetch("config.json").then(r => r.ok ? r.json() : {}).catch(() => ({}))
+    .then(cfg => (cfg.push_api || "").replace(/\/$/, ""));
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const datos = Object.fromEntries(new FormData(form));
+    for (const k of ["nombre", "email", "mensaje"]) datos[k] = datos[k].trim();
+    if (!datos.nombre) return avisar("Escribe tu nombre.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(datos.email)) return avisar("El email no parece válido.");
+    if (datos.mensaje.length < 10) return avisar("El mensaje es demasiado corto.");
+
+    boton.disabled = true;
+    avisar("");
+    try {
+      const url = await api;
+      if (!url) throw new Error("sin servidor");
+      const r = await fetch(url + "/contacto", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos) });
+      const resp = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        // Los errores 4xx traen un texto pensado para mostrarlo; el resto, mensaje genérico
+        throw new Error(r.status < 500 && resp.error ? resp.error : "");
+      }
+      form.hidden = true;
+      document.getElementById("gracias").hidden = false;
+    } catch (e) {
+      avisar(e.message && e.message !== "sin servidor" && !(e instanceof TypeError) ? e.message
+        : "No se ha podido enviar el mensaje. Inténtalo de nuevo o escríbenos a contacto@eventosmadridmetropolitano.es.");
+    } finally {
+      boton.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

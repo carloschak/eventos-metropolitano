@@ -1,4 +1,4 @@
-# Servidor de suscripciones a los avisos push (Cloudflare Worker).
+# Servidor de la web (Cloudflare Worker): avisos push y formulario de contacto.
 # Cómo desplegarlo: mira la sección "Avisos en el móvil" del README.
 name = "eventos-metropolitano-avisos"
 main = "src/index.js"
@@ -7,6 +7,13 @@ compatibility_date = "2025-06-01"
 [vars]
 # Webs que pueden suscribirse (separadas por comas, sin barra final)
 ALLOWED_ORIGINS = "https://eventosmadridmetropolitano.es,https://www.eventosmadridmetropolitano.es"
+
+# Formulario de contacto: el correo sale del buzón de la web por SMTP.
+# Pon el servidor de salida (SMTP) que te da tu proveedor de correo. Puerto 465 (SSL) o 587 (STARTTLS).
+# El usuario y la contraseña del buzón son secretos: `npx wrangler secret put SMTP_USUARIO` y `... SMTP_CLAVE`.
+SMTP_HOST = ""
+SMTP_PUERTO = "465"
+CONTACTO_DESTINO = "contacto@eventosmadridmetropolitano.es"
 
 # Base de datos donde se guardan las suscripciones.
 # Crea la tuya con `npx wrangler kv namespace create SUSCRIPCIONES` y pega aquí el id que te dé.

@@ -1,7 +1,7 @@
 """
 Avisos push en el móvil (Web Push con claves VAPID).
 
-avisar.py decide QUÉ eventos avisar (los de mañana, la misma lógica que Telegram) y llama a
+avisar.py decide QUÉ eventos avisar (los de mañana) y llama a
 enviar(). Este archivo solo se ocupa de CÓMO enviarlos:
   1. pide la lista de suscriptores al servidor de suscripciones (Cloudflare Worker, carpeta worker/),
   2. envía a cada uno una notificación por evento,
